@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CalisanTakip.Models;
 using CalisanTakip.Repository;
+using Microsoft.AspNetCore.Http;
 
 namespace CalisanTakip.Controllers
 {
@@ -10,23 +11,42 @@ namespace CalisanTakip.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.mesaj = null;
             return View();
         }
 
         [HttpPost]
         public IActionResult Index(string kullaniciAd, string parola)
         {
-            // BURAYA PASSORD HASHER GELECEK!!!!!!!!!!!!!!!!
-            var personeller= Entity.Personellers
-                            .FirstOrDefault(u => u.PersonelKullaniciAd == kullaniciAd && u.PersonelParola == parola);
+            // BURAYA PASSWORD HASHER GELECEK!!!!!!!!!!!!!!!!
+            var personel= Entity.Personellers
+                            .FirstOrDefault(p => p.PersonelKullaniciAd == kullaniciAd && p.PersonelParola == parola);
 
-            if (personeller != null)
+            if (personel != null)//personel null değilse giriş yapabilir nullsa giremez 
             {
-                return RedirectToAction("", "Home");
+                HttpContext.Session.SetString("PersonelAdSoyad", personel.PersonelAdSoyad  );
+                HttpContext.Session.SetInt32("PersonelId", personel.PersonelId);
+                HttpContext.Session.SetInt32("PersonelBirimId", personel.PersonlBirimId ?? 0);
+                HttpContext.Session.SetInt32("PersonelYetkiTurID", personel.PersonelYetkiTurId ?? 0);
+                switch(personel.PersonelYetkiTurId)
+                {
+                    case 1:
+                        return RedirectToAction("Index", "Yonetici");
+                    case 2:
+                        return RedirectToAction("Index", "Home");
+                    default:
+                        ViewBag.mesaj = "Geçersiz yetki türü.";
+                        return View();
+
+
+
+
+                }
+
             }
             else
             {
-                ViewBag.ErrorMessage = "Kullanıcı adı veya parola yanlış";
+                ViewBag.mesaj = "Kullanıcı adı veya parola yanlış";
                 return View();
             }
         }

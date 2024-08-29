@@ -1,45 +1,127 @@
-﻿@if (ViewBag.ErrorMessage != null)
-{
-    <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+﻿@{
+    ViewData["Title"] = "Login Page";
+    Layout = null;
 }
 
-
 <!doctype html>
-<html lang="en" data-bs-theme="auto">
+<html lang="en">
 <head>
-    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    
     <title>İş Takip Sistemi Giriş</title>
-    <!-- Custom styles for this template -->
-    <link href="sign-in.css" rel="stylesheet">
-</head>
-<body class="d-flex align-items-center py-4 bg-body-tertiary">
-    
-    <main class="form-signin w-100 m-auto">
-        @using (Html.BeginForm("Index", "Login", FormMethod.Post))
-        {
-
-            <h1 class="h3 mb-3 fw-normal">Takip Sistemi Giriş Sayfası</h1>
-            <br />
-            <div class="form-floating">
-                <input type="text" class="form-control" id="kullaniciAd" name="kullaniciAd" >
-                <label for="kullaniciAd">Kullanıcı Adınız</label>
-            </div>
-            <div class="form-floating">
-                <input type="password" class="form-control" id="Parola" name="parola" >
-                <label for="Parola">Parola</label>
-            </div>
-            <br />
-            
-            <button class="btn btn-primary w-100 py-2" type="submit">Giriş</button>
+    <style>
+        body {
+            background-color: #f0f8ff; /* Açık mavi arka plan */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
         }
 
-        
-    </main>
-    
+        .navbar-custom {
+            background-color: #007bff; /* Mavi nav bar */
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+            .navbar-custom h1 {
+                color: white;
+                margin: 0;
+                font-size: 1.75rem;
+            }
+
+        .form-signin {
+            max-width: 500px;
+            width: 100%;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            margin-top: 70px; /* Navbar yüksekliği kadar boşluk bırakmak için */
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+            .form-group label {
+                display: block;
+                font-size: 1.25rem;
+                color: #007bff;
+                margin-bottom: 0.5rem;
+            }
+
+            .form-group input {
+                width: 100%;
+                height: 60px;
+                font-size: 1.25rem;
+                padding: 0 15px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: 1px solid #007bff;
+            color: white;
+            font-size: 1.25rem;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+                border-color: #0056b3;
+            }
+
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            margin-top: 20px;
+            font-size: 1rem;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar-custom">
+        <h1>İş Takip Sistemi Giriş</h1>
+    </div>
+
+    <div class="form-signin">
+        @using (Html.BeginForm("Index", "Login", FormMethod.Post))
+        {
+            <div class="form-group">
+                <label for="kullaniciAd">Kullanıcı Adınız</label>
+                <input type="text" id="kullaniciAd" name="kullaniciAd" required>
+            </div>
+            <div class="form-group">
+                <label for="parola">Parola</label>
+                <input type="password" id="parola" name="parola" required>
+            </div>
+            <button class="btn-primary" type="submit">Giriş</button>
+
+            @if (ViewBag.mesaj != null)
+            {
+                <div class="alert-danger">
+                    @ViewBag.mesaj
+                </div>
+            }
+        }
+    </div>
 
 </body>
 </html>
