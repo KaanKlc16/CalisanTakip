@@ -6,12 +6,14 @@
     var personelId = ViewBag.PersonelId as int?;
     var personelBirimId = ViewBag.PersonelBirimId as int?;
     var personelYetkiTurID = ViewBag.PersonelYetkiTurID as int?;
+    var birimAd = ViewBag.BirimAd as string;
 }
 
 <h1>Index</h1>
 
 
-<p>Personel Ad Soyad: @personelAdSoyad</p>
+<p>Yönetici Ad Soyad: @personelAdSoyad</p>
 <p>Personel ID: @personelId</p>
 <p>Birim ID: @personelBirimId</p>
 <p>Yetki Tür ID: @personelYetkiTurID</p>
+<p>Birim Ad: @birimAd </p>

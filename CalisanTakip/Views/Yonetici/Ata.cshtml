@@ -1,0 +1,47 @@
+﻿@model CalisanTakip.Models.Isler
+
+@{
+    ViewData["Title"] = "Ata";
+    Layout = "~/Views/Shared/_LayoutYonetici.cshtml";
+}
+
+<h1 class="text-center my-4">İş Atama</h1>
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">@ViewBag.BirimAd Ekibi İçin İş Atama İşlemi</h4>
+        </div>
+        <div class="card-body">
+            @using (Html.BeginForm("Ata", "Yonetici", FormMethod.Post))
+            {
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group mb-4">
+                    <label for="isBaslik" class="form-label">İş Başlığını Giriniz</label>
+                    @Html.TextBoxFor(model => model.IsBaslik, new { @class = "form-control form-control-lg", placeholder = "İş başlığı" })
+                    @Html.ValidationMessageFor(model => model.IsBaslik, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="isAciklama" class="form-label">İş Açıklamasını Giriniz</label>
+                    @Html.TextAreaFor(model => model.IsAciklama, new { @class = "form-control form-control-lg", rows = 4, placeholder = "İş açıklaması" })
+                    @Html.ValidationMessageFor(model => model.IsAciklama, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="isPersonelId" class="form-label">Çalışan Seçiniz</label>
+                    @Html.DropDownListFor(model => model.IsPersonelId,
+                             new SelectList(ViewBag.personeller, "PersonelId", "PersonelAdSoyad"),
+                             "Çalışan Seçiniz",
+                             new { @class = "form-select form-select-lg" })
+                    @Html.ValidationMessageFor(model => model.IsPersonelId, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success btn-lg">İş Ata</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
