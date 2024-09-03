@@ -3,7 +3,21 @@ using CalisanTakip.Repository.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CalisanTakip.Controllers
-{
+{ 
+    public class IsDurum
+    {
+        public String isAciklama { get; set; }
+        public String isBaslik { get; set; }
+
+        public DateTime? iletilenTarih { get; set; } 
+
+        public DateTime? yapilanTarih { get; set; }
+        
+        public String durumAd { get; set; }
+
+
+
+    }
     public class CalisanController : Controller
     {
         private readonly IsTakipDbContext _context;
@@ -78,5 +92,42 @@ namespace CalisanTakip.Controllers
 
             return RedirectToAction("Index", "Calisan");
         }
+
+
+
+        public IActionResult Takip() {
+
+            var personelYetkiTurID = HttpContext.Session.GetInt32("PersonelYetkiTurID");
+
+            if (personelYetkiTurID == 2)
+            {
+                var personelId = HttpContext.Session.GetInt32("PersonelId");
+                var isler = _context.Islers
+                    .Where(i => i.IsPersonelId == personelId && i.IsDurumId == 1)
+                    .ToList()
+                    .OrderByDescending(i=>i.IletilenTarih);
+
+                IsDurumModel model = new IsDurumModel();
+
+                List<IsDurum>list= new List<IsDurum>();
+
+                foreach(var i in isler)
+                {
+                    IsDurumModel isDurum = new IsDurumModel();
+
+                    isDurum.isBaslik = i.IsBaslik;
+                    isDurum.isAciklama=i.IsAciklama
+
+                }
+
+                ViewBag.isler = isler;
+                return View(isler);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Login");
+            }
+        }
+
     }
 }

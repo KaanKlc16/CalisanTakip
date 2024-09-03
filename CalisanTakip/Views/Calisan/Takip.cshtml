@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewData["Title"] = "Takip";
+    Layout = "~/Views/Shared/_LayoutCalisan.cshtml";
+    @model List<CalisanTakip.Models.Isler>
+}
+
+<h1>Takip</h1>
+
+@foreach(var item in Model)
+{
+   @item.IsBaslik
+}
