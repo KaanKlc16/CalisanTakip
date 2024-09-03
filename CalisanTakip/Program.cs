@@ -42,11 +42,8 @@ app.UseAuthorization();
 
 app.UseSession(); // Ensure this is added to the middleware pipeline
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Login}/{action=Index}/{id?}");
-});
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 app.Run();

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace CalisanTakip.Models;
+namespace CalisanTakip.Repository.Models;
 
 [Table("YetkiTurler")]
 public partial class YetkiTurler

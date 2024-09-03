@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CalisanTakip.Models;
+using CalisanTakip.Repository.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CalisanTakip.Repository;
@@ -34,9 +35,11 @@ public partial class IsTakipDbContext : DbContext
     {
         modelBuilder.Entity<Isler>(entity =>
         {
-            entity.HasOne(d => d.IsDurum).WithMany().HasConstraintName("FK_Isler_Durumlar");
+            entity.Property(e => e.IsId).ValueGeneratedOnAdd();
 
-            entity.HasOne(d => d.IsPersonel).WithMany().HasConstraintName("FK_Isler_Personeller");
+            entity.HasOne(d => d.IsDurum).WithMany(p => p.Islers).HasConstraintName("FK_Isler_Durumlar");
+
+            entity.HasOne(d => d.IsPersonel).WithMany(p => p.Islers).HasConstraintName("FK_Isler_Personeller");
         });
 
         modelBuilder.Entity<Personeller>(entity =>

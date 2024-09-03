@@ -1,13 +1,17 @@
 ﻿using CalisanTakip.Models;
 using CalisanTakip.Repository;
+using CalisanTakip.Repository.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace CalisanTakip.Controllers
-{  //IsTakipDbContext Entity = new IsTakipDbContext(); böyle tanımlamıştım en başta
+{
     public class YoneticiController : Controller
     {
         private readonly IsTakipDbContext _context;
-       
+
         public YoneticiController()
         {
             _context = new IsTakipDbContext();
@@ -69,6 +73,7 @@ namespace CalisanTakip.Controllers
                 return RedirectToAction("Index", "Login");
             }
         }
+
         [HttpPost]
         public ActionResult Ata(Isler model)
         {
@@ -103,6 +108,7 @@ namespace CalisanTakip.Controllers
             };
              
              */
+
             model.IletilenTarih = DateTime.Now;
             model.IsDurumId = 1;
 
@@ -112,5 +118,79 @@ namespace CalisanTakip.Controllers
             return RedirectToAction("Takip", "Yonetici");
         }
 
+        public IActionResult Takip()
+        {
+            var personelYetkiTurID = HttpContext.Session.GetInt32("PersonelYetkiTurID");
+            if (personelYetkiTurID == 1)
+            {
+                var birimId = HttpContext.Session.GetInt32("PersonelBirimId");
+                var calisanlar = _context.Personellers
+                               .Where(p => p.PersonlBirimId == birimId && p.PersonelYetkiTurId == 2)
+                               .ToList();
+                ViewBag.personeller = calisanlar;
+
+                var birimAd = _context.Birimlers
+                   .Where(b => b.BirimId == birimId)
+                   .Select(b => b.BirimAd)
+                   .FirstOrDefault();
+
+                ViewBag.BirimAd = birimAd;
+                return View();
+            }
+            else
+            {
+                RedirectToAction("Index", "Home");
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Takip(int selectPer)
+        {
+            var secilenPersonel = _context.Personellers
+                                   .FirstOrDefault(p => p.PersonelId == selectPer);
+
+            // Newtonjson paketi kullandım session ile işlem yaparken
+            HttpContext.Session.SetString("SecilenPersonel", JsonConvert.SerializeObject(secilenPersonel));
+
+            return RedirectToAction("Listele", "Yonetici");
+        }
+
+        [HttpGet]
+        public IActionResult Listele()
+        {
+            var personelYetkiTurID = HttpContext.Session.GetInt32("PersonelYetkiTurID");
+            var secilenPersonelJson = HttpContext.Session.GetString("SecilenPersonel");
+            var secilenPersonel = JsonConvert.DeserializeObject<Personeller>(secilenPersonelJson);
+
+            if (personelYetkiTurID == 1)
+            {
+                // Retrieve the selected person from the session
+                try
+                {
+                    var isler = _context.Islers
+                    .Where(i => i.IsPersonelId == secilenPersonel.PersonelId)
+                    .OrderByDescending(i => i.IletilenTarih)
+                    .ToList();
+
+                    ViewBag.Isler = isler;
+                    ViewBag.Personeller = secilenPersonel;
+                    return View();
+                }
+                catch(Exception) 
+                {
+                   
+                    return RedirectToAction("Takip", "Yonetici");
+
+                }
+
+                //İŞ DURUMUNU GOSTEREN KODU YAZMAYI UNUTMA !!!
+
+                }
+            else
+            {
+                return RedirectToAction("Index", "Login");
+            }
+        }
     }
 }

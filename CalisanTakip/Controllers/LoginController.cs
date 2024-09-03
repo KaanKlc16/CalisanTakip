@@ -24,7 +24,7 @@ namespace CalisanTakip.Controllers
 
             if (personel != null)//personel null değilse giriş yapabilir nullsa giremez 
             {
-                HttpContext.Session.SetString("PersonelAdSoyad", personel.PersonelAdSoyad  );
+                HttpContext.Session.SetString("PersonelAdSoyad", personel.PersonelAdSoyad ?? string.Empty);
                 HttpContext.Session.SetInt32("PersonelId", personel.PersonelId);
                 HttpContext.Session.SetInt32("PersonelBirimId", personel.PersonlBirimId ?? 0);
                 HttpContext.Session.SetInt32("PersonelYetkiTurID", personel.PersonelYetkiTurId ?? 0);

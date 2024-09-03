@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using CalisanTakip.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CalisanTakip.Models;
+namespace CalisanTakip.Repository.Models;
 
 [Table("Personeller")]
 public partial class Personeller
@@ -30,6 +31,9 @@ public partial class Personeller
 
     [Column("personelYetkiTurId")]
     public int? PersonelYetkiTurId { get; set; }
+
+    [InverseProperty("IsPersonel")]
+    public virtual ICollection<Isler> Islers { get; set; } = new List<Isler>();
 
     [ForeignKey("PersonelYetkiTurId")]
     [InverseProperty("Personellers")]

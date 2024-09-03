@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using CalisanTakip.Repository.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CalisanTakip.Models;
 
-[Keyless]
+
 [Table("Isler")]
 public partial class Isler
 {
+    [Key]
     [Column("isId")]
     public int? IsId { get; set; }
 
