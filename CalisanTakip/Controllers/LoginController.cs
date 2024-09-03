@@ -33,7 +33,7 @@ namespace CalisanTakip.Controllers
                     case 1:
                         return RedirectToAction("Index", "Yonetici");
                     case 2:
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Calisan");
                     default:
                         ViewBag.mesaj = "Geçersiz yetki türü.";
                         return View();

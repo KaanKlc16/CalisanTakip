@@ -1,0 +1,117 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İş Takip Calışan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+            .navbar a {
+                float: left;
+                display: block;
+                color: white;
+                text-align: center;
+                padding: 14px 20px;
+                text-decoration: none;
+                font-size: 17px;
+            }
+
+                .navbar a:hover {
+                    background-color: #575757;
+                }
+
+                .navbar a.active {
+                    background-color: #4CAF50;
+                }
+
+            .navbar .search-container {
+                float: right;
+            }
+
+            .navbar input[type="text"] {
+                padding: 6px;
+                margin-top: 8px;
+                margin-right: 16px;
+                font-size: 17px;
+                border: none;
+                border-radius: 4px;
+            }
+
+            .navbar button {
+                float: right;
+                padding: 6px 10px;
+                margin-top: 8px;
+                margin-right: 16px;
+                background-color: #4CAF50;
+                color: white;
+                font-size: 17px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+                .navbar button:hover {
+                    background-color: #45a049;
+                }
+
+        .container {
+            margin: 50px auto;
+            max-width: 1200px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+
+        @@media screen and (max-width: 600px) {
+            .navbar a, .navbar input[type="text"], .navbar button {
+                float: none;
+                display: block;
+                text-align: left;
+                width: 100%;
+                margin: 0;
+                padding: 14px;
+            }
+
+            .navbar input[type="text"] {
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="#" class="active">İş Takip</a>
+        @Html.ActionLink("Anasayfa", "Index", "Calisan", null, new { @class = "" })
+        @Html.ActionLink("İş tamamla", "Yap", "Calisan", null, new { @class = "" })
+        @Html.ActionLink("İş Takip", "Takip", "Calisan", null, new { @class = "" })
+        <div class="search-container">
+            <form action="/action_page.php">
+                <input type="text" placeholder="Ara..." name="search">
+                <button type="submit">Ara</button>
+            </form>
+        </div>
+    </nav>
+
+    <main role="main" class="container">
+        @RenderBody()
+    </main>
+</body>
+</html>

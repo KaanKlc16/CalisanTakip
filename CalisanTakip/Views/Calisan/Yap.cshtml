@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Yap";
+    Layout = "~/Views/Shared/_LayoutCalisan.cshtml";
+}
+
+<div class="container mt-5">
+    @foreach (var i in ViewBag.isler)
+    {
+        @using (Html.BeginForm("Yap", "Calisan", FormMethod.Post))
+        {
+            <div class="card"> 
+                <div class="card-header text-center">
+                    @i.IsBaslik
+                </div>
+                <div class="card-header text-body">
+                    @i.IsAciklama
+
+                    <input type="hidden" name="isId" value="@i.IsId" />
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-outline-success">Tamamla</button>
+                </div>
+                <br/>
+            </div>
+        }
+    }
+</div>
