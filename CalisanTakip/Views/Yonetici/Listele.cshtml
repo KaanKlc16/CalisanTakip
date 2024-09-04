@@ -1,4 +1,5 @@
-﻿@{
+﻿@using CalisanTakip.Repository.Models
+@{
     ViewData["Title"] = "Listele";
     Layout = "~/Views/Shared/_LayoutYonetici.cshtml";
 }
@@ -9,21 +10,40 @@
             @ViewBag.Personeller.PersonelAdSoyad İşleri
         </h3>
     </div>
-    @foreach (var i in ViewBag.Isler)
+    @if(ViewBag.isSayisi != 0)
     {
-        <div class="card">
-            <div class="card-header bg-black text-center text-white">
-                @i.IsBaslik
-            </div>
-            <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">@i.IsAciklama</li>
 
-                    <li class="list-group-item">İletilen Tarih: @i.IletilenTarih.ToString("dd MMMM yyyy hh:mm")</li>
-                    <li class="list-group-item">Yapılan Tarih: @(i.YapilanTarih != null ? i.YapilanTarih.ToString("dd MMMM yyyy hh:mm"):"henüz girilmedi") </li>
-                  
-                </ul>
+        foreach (var i in ViewBag.Isler)
+        {
+            <div class="card">
+                <div class="card-header bg-black text-center text-white">
+                    @i.IsBaslik
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">   İş Açıklama:@i.IsAciklama</li>
+
+                        <li class="list-group-item">İletilen Tarih: @i.IletilenTarih.ToString("dd MMMM yyyy hh:mm")</li>
+                        <li class="list-group-item">Yapılan Tarih: @(i.YapilanTarih != null ? i.YapilanTarih.ToString("dd MMMM yyyy hh:mm") : "henüz girilmedi") </li>
+                        <li class="list-group-item"> Calışan Yorumu:@i.IsYorum</li>
+                        <li class="list-group-item">Tahmini Biitirme Süresi:@i.TahminiSure</li>
+                        <li class="list-group-item">İş Durumu:
+                        </li>
+
+
+                    </ul>
+                </div>
             </div>
+        }
+
+
+    }
+    else
+    {
+        <div class="alert alert-secondary" role="alert">
+            Henüz İş Verilmemiş
+
+
         </div>
     }
 </div>

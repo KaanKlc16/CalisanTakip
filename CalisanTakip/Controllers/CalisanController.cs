@@ -67,7 +67,7 @@ namespace CalisanTakip.Controllers
         }
 
         [HttpPost]
-        public IActionResult Yap(int isId)
+        public IActionResult Yap(int isId,string isYorum,DateTime tahminiSure)
         {
             var tekIs = _context.Islers
                 .Where(i => i.IsId == isId)
@@ -75,8 +75,11 @@ namespace CalisanTakip.Controllers
 
             if (tekIs != null)
             {
+                if (isYorum == "") isYorum = "Çalışan Yorum Yapmadı";
                 tekIs.YapilanTarih = DateTime.Now;
                 tekIs.IsDurumId = 2;
+                tekIs.IsYorum = isYorum;
+                tekIs.TahminiSure = tahminiSure;
                 _context.SaveChanges();
             }
 
@@ -90,10 +93,22 @@ namespace CalisanTakip.Controllers
             if (personelYetkiTurID == 2)
             {
                 var personelId = HttpContext.Session.GetInt32("PersonelId");
-                var isler = _context.Islers
-                    .Where(i => i.IsPersonelId == personelId && i.IsDurumId == 1)
-                    .OrderByDescending(i => i.IletilenTarih)
-                    .ToList();
+                
+
+                var isler = (from i in _context.Islers
+                              join d in _context.Durumlars on i.IsDurumId equals d.DurumId
+                              where i.IsPersonelId == personelId
+                              orderby i.IletilenTarih descending
+                              select new
+                              {
+                                  i.IsBaslik,
+                                  i.IsAciklama,
+                                  i.IletilenTarih,
+                                  i.YapilanTarih,
+                                   d.DurumAd,
+                                   i.IsYorum
+                              }).ToList();
+
 
                 IsDurumModel model = new IsDurumModel();
 
@@ -105,6 +120,10 @@ namespace CalisanTakip.Controllers
                         isAciklama = i.IsAciklama,
                         iletilenTarih = i.IletilenTarih,
                         yapilanTarih = i.YapilanTarih,
+                        durumAd = i.DurumAd,
+                        isYorum = i.IsYorum
+
+
                         // durumAd=i.Durumlars.DurumAd, durum aayrla
                         // durumAd = i.isler.DurumAd
 

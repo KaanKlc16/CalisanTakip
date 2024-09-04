@@ -108,7 +108,7 @@ namespace CalisanTakip.Controllers
             };
              
              */
-
+            
             model.IletilenTarih = DateTime.Now;
             model.IsDurumId = 1;
 
@@ -165,7 +165,7 @@ namespace CalisanTakip.Controllers
 
             if (personelYetkiTurID == 1)
             {
-                // Retrieve the selected person from the session
+               
                 try
                 {
                     var isler = _context.Islers
@@ -175,6 +175,8 @@ namespace CalisanTakip.Controllers
 
                     ViewBag.Isler = isler;
                     ViewBag.Personeller = secilenPersonel;
+                    ViewBag.IsSayisi = isler.Count();
+
                     return View();
                 }
                 catch(Exception) 

@@ -8,22 +8,27 @@
     {
         @using (Html.BeginForm("Yap", "Calisan", FormMethod.Post))
         {
-            <div class="card"> 
+            <div class="card">
                 <div class="card-header text-center">
                     @i.IsBaslik
                 </div>
                 <div class="card-header text-body">
-                   İş Açıklama: @i.IsAciklama
+                    İş Açıklama: @i.IsAciklama
                     <div class="mb-3">
-                       <label for="isYorum" class="form-label">Yorum Giriniz</label>
-                       <input type="text" class="form-control" name="isYorum"/>
+                        <label for="isYorum" class="form-label">Yorum Giriniz</label>
+                        <input type="text" class="form-control" name="isYorum" />
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="tahminiSure" class="form-label">Tahmini Süre (saat)</label>
+                        <input type="number" class="form-control" name="tahminiSure" min="0" step="0.1" placeholder="Örn: 1.5" />
                     </div>
                     <input type="hidden" name="isId" value="@i.IsId" />
                 </div>
                 <div class="card-footer">
                     <button type="submit" class="btn btn-outline-success">Tamamla</button>
                 </div>
-                <br/>
+                <br />
             </div>
         }
     }

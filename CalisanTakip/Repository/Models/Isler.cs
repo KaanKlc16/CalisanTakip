@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using CalisanTakip.Repository.Models;
+
 using Microsoft.EntityFrameworkCore;
 
-namespace CalisanTakip.Models;
-
+namespace CalisanTakip.Repository.Models;
 
 [Table("Isler")]
 public partial class Isler
 {
     [Key]
     [Column("isId")]
-    public int? IsId { get; set; }
+    public int IsId { get; set; }
 
     [Column("isBaslik")]
     public string? IsBaslik { get; set; }
@@ -33,9 +32,17 @@ public partial class Isler
     [Column("isDurumId")]
     public int? IsDurumId { get; set; }
 
+    [Column("isYorum")]
+    public string? IsYorum { get; set; }
+
+    [Column("tahminiSure", TypeName = "datetime")]
+    public DateTime? TahminiSure { get; set; }
+
     [ForeignKey("IsDurumId")]
+    [InverseProperty("Islers")]
     public virtual Durumlar? IsDurum { get; set; }
 
     [ForeignKey("IsPersonelId")]
+    [InverseProperty("Islers")]
     public virtual Personeller? IsPersonel { get; set; }
 }

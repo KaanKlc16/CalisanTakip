@@ -12,7 +12,9 @@
         public DateTime? iletilenTarih { get; set; }
         public DateTime? yapilanTarih { get; set; }
 
-        
+        public string? isYorum { get; set; }
+
+        public DateTime tahminiSure { get; set; }
         public string? durumAd { get; set; }
     }
 }

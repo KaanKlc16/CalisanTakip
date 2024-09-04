@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using CalisanTakip.Models;
 using CalisanTakip.Repository.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,15 +27,12 @@ public partial class IsTakipDbContext : DbContext
     public virtual DbSet<YetkiTurler> YetkiTurlers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Data Source=DESKTOP-D870JAD\\SQLEXPRESS;Initial Catalog=IsTakipDB;Integrated Security=True;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Isler>(entity =>
         {
-            entity.Property(e => e.IsId).ValueGeneratedOnAdd();
-
             entity.HasOne(d => d.IsDurum).WithMany(p => p.Islers).HasConstraintName("FK_Isler_Durumlar");
 
             entity.HasOne(d => d.IsPersonel).WithMany(p => p.Islers).HasConstraintName("FK_Isler_Personeller");
