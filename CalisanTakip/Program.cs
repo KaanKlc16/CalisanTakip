@@ -14,7 +14,7 @@ builder.Services.AddDbContext<IsTakipDbContext>(options =>
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.IdleTimeout = TimeSpan.FromMinutes(30);//çýkýþ iþlemleri
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });

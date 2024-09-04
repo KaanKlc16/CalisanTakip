@@ -37,6 +37,7 @@ namespace CalisanTakip.Controllers
                     default:
                         ViewBag.mesaj = "Geçersiz yetki türü.";
                         return View();
+                        
 
 
 

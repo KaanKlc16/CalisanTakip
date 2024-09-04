@@ -1,13 +1,26 @@
-﻿
+﻿@model CalisanTakip.Repository.Models.IsDurumModel
+
 @{
     ViewData["Title"] = "Takip";
     Layout = "~/Views/Shared/_LayoutCalisan.cshtml";
-    @model List<CalisanTakip.Models.Isler>
 }
 
 <h1>Takip</h1>
 
-@foreach(var item in Model)
+@foreach (var isDurum in Model.isDurumlar)
 {
-   @item.IsBaslik
+    <div class="card">
+        <div class="card-header bg-black text-center text-white">
+            @isDurum.isBaslik
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">@isDurum.isAciklama</li>
+                <li class="list-group-item">@isDurum.iletilenTarih</li>
+                <li class="list-group-item">@isDurum.yapilanTarih</li>
+               <li class="list-group-item">@isDurum.durumAd</li>
+            </ul>
+        </div>
+        <br />
+    </div>
 }

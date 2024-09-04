@@ -1,23 +1,13 @@
 ﻿using CalisanTakip.Repository;
 using CalisanTakip.Repository.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace CalisanTakip.Controllers
-{ 
-    public class IsDurum
-    {
-        public String isAciklama { get; set; }
-        public String isBaslik { get; set; }
+{
+    
 
-        public DateTime? iletilenTarih { get; set; } 
-
-        public DateTime? yapilanTarih { get; set; }
-        
-        public String durumAd { get; set; }
-
-
-
-    }
     public class CalisanController : Controller
     {
         private readonly IsTakipDbContext _context;
@@ -93,10 +83,8 @@ namespace CalisanTakip.Controllers
             return RedirectToAction("Index", "Calisan");
         }
 
-
-
-        public IActionResult Takip() {
-
+        public IActionResult Takip()
+        {
             var personelYetkiTurID = HttpContext.Session.GetInt32("PersonelYetkiTurID");
 
             if (personelYetkiTurID == 2)
@@ -104,30 +92,33 @@ namespace CalisanTakip.Controllers
                 var personelId = HttpContext.Session.GetInt32("PersonelId");
                 var isler = _context.Islers
                     .Where(i => i.IsPersonelId == personelId && i.IsDurumId == 1)
-                    .ToList()
-                    .OrderByDescending(i=>i.IletilenTarih);
+                    .OrderByDescending(i => i.IletilenTarih)
+                    .ToList();
 
                 IsDurumModel model = new IsDurumModel();
 
-                List<IsDurum>list= new List<IsDurum>();
-
-                foreach(var i in isler)
+                foreach (var i in isler)
                 {
-                    IsDurumModel isDurum = new IsDurumModel();
+                    IsDurum isDurum = new IsDurum
+                    {
+                        isBaslik = i.IsBaslik,
+                        isAciklama = i.IsAciklama,
+                        iletilenTarih = i.IletilenTarih,
+                        yapilanTarih = i.YapilanTarih,
+                        // durumAd=i.Durumlars.DurumAd, durum aayrla
+                        // durumAd = i.isler.DurumAd
 
-                    isDurum.isBaslik = i.IsBaslik;
-                    isDurum.isAciklama=i.IsAciklama
-
+                    };
+                    model.isDurumlar.Add(isDurum);
                 }
 
                 ViewBag.isler = isler;
-                return View(isler);
+                return View(model);
             }
             else
             {
                 return RedirectToAction("Index", "Login");
             }
         }
-
     }
 }

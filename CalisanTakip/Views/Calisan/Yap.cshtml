@@ -13,8 +13,11 @@
                     @i.IsBaslik
                 </div>
                 <div class="card-header text-body">
-                    @i.IsAciklama
-
+                   İş Açıklama: @i.IsAciklama
+                    <div class="mb-3">
+                       <label for="isYorum" class="form-label">Yorum Giriniz</label>
+                       <input type="text" class="form-control" name="isYorum"/>
+                    </div>
                     <input type="hidden" name="isId" value="@i.IsId" />
                 </div>
                 <div class="card-footer">
