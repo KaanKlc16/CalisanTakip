@@ -14,7 +14,7 @@
 
         public string? isYorum { get; set; }
 
-        public DateTime tahminiSure { get; set; }
+        public DateTime? tahminiSure { get; set; }
         public string? durumAd { get; set; }
     }
 }

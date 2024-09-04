@@ -3,6 +3,7 @@ using CalisanTakip.Repository.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace CalisanTakip.Controllers
 {
@@ -78,9 +79,22 @@ namespace CalisanTakip.Controllers
                 if (isYorum == "") isYorum = "Çalışan Yorum Yapmadı";
                 tekIs.YapilanTarih = DateTime.Now;
                 tekIs.IsDurumId = 2;
+                
+                if(tahminiSure == DateTime.MinValue)
+        tahminiSure = DateTime.Now.AddHours(1);
                 tekIs.IsYorum = isYorum;
                 tekIs.TahminiSure = tahminiSure;
-                _context.SaveChanges();
+                try
+                {
+                    _context.SaveChanges();
+                }
+                catch (DbUpdateException ex)
+                {
+                    
+                    Console.WriteLine(ex.InnerException?.Message);
+                    throw; 
+                }
+
             }
 
             return RedirectToAction("Index", "Calisan");
