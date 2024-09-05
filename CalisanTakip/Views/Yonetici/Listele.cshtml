@@ -4,47 +4,147 @@
     Layout = "~/Views/Shared/_LayoutYonetici.cshtml";
 }
 
+<!-- Genel Stil Ayarları -->
+<style>
+    /* Genel Arka Plan */
+    body {
+        background-color: #2c3e50; /* Koyu mavi arka plan */
+        color: #333; /* Koyu gri yazı rengi */
+    }
+
+    /* Container */
+    .container {
+        max-width: 900px;
+        background-color: #ffffff; /* Beyaz arka plan */
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Kart Stili */
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 15px;
+        border: none;
+        margin-bottom: 30px;
+    }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+    .card-header {
+        font-size: 1.5rem;
+        font-weight: bold;
+        background: linear-gradient(45deg, #0b3d91, #145214);
+        color: white;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        word-wrap: break-word;
+    }
+
+    .card-body {
+        background-color: #f0f4f7;
+    }
+
+    .list-group-item {
+        font-size: 1.1rem;
+        font-weight: 500;
+        display: flex;
+        justify-content: space-between;
+        background-color: transparent;
+        word-wrap: break-word;
+        white-space: normal;
+    }
+
+        .list-group-item strong {
+            color: #0b3d91;
+        }
+
+    h3 {
+        color: #0b3d91;
+        font-weight: 700;
+    }
+
+    .btn-custom {
+        background-color: #145214;
+        color: white;
+        font-weight: bold;
+        border-radius: 50px;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-custom:hover {
+            background-color: #0b3d91;
+        }
+
+    /* Kart içindeki öğelerin taşmasını engellemek için */
+    .card-body ul {
+        padding-left: 0;
+        list-style: none;
+    }
+
+    .list-group-item span {
+        max-width: 65%; /* Yazıların aşırı uzun olmasını engellemek için */
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .list-group-item strong {
+        max-width: 30%;
+    }
+</style>
+
+<!-- İçerik -->
 <div class="container mt-5">
-    <div class="mb-3">
+    <div class="text-center mb-5">
         <h3>
-            @ViewBag.Personeller.PersonelAdSoyad İşleri
+            @ViewBag.Personeller.PersonelAdSoyad Görevleri
         </h3>
     </div>
-    @if(ViewBag.isSayisi != 0)
-    {
 
-        foreach (var i in ViewBag.Isler)
+    @if (ViewBag.isSayisi != 0)
+    {
+        <!-- İş Kartları -->
+        @foreach (var i in ViewBag.Isler)
         {
-            <div class="card">
-                <div class="card-header bg-black text-center text-white">
+            <div class="card shadow-lg">
+                <div class="card-header text-center">
                     @i.IsBaslik
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">   İş Açıklama:@i.IsAciklama</li>
-
-                        <li class="list-group-item">İletilen Tarih: @i.IletilenTarih.ToString("dd MMMM yyyy hh:mm")</li>
-                        <li class="list-group-item">Yapılan Tarih: @(i.YapilanTarih != null ? i.YapilanTarih.ToString("dd MMMM yyyy hh:mm") : "henüz girilmedi") </li>
-                        <li class="list-group-item"> Calışan Yorumu:@i.IsYorum</li>
-                        <li class="list-group-item">Tahmini Biitirme:@i.TahminiSure</li>
-
-                        <li class="list-group-item">İş Durumu:
+                        <li class="list-group-item">
+                            <strong>Görev Açıklama:</strong>
+                            <span>@i.IsAciklama</span>
                         </li>
-
-
+                        <li class="list-group-item">
+                            <strong>İletilen Tarih:</strong>
+                            <span>@i.IletilenTarih.ToString("dd MMMM yyyy hh:mm")</span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Yapılan Tarih:</strong>
+                            <span>@(i.YapilanTarih != null ? i.YapilanTarih.ToString("dd MMMM yyyy hh:mm") : "Henüz girilmedi")</span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Çalışan Yorumu:</strong>
+                            <span>@i.IsYorum</span>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Tahmini Bitirme:</strong>
+                            <span>@i.TahminiSure dakika</span>
+                        </li>
+                        
                     </ul>
                 </div>
             </div>
         }
-
-
     }
     else
     {
-        <div class="alert alert-secondary" role="alert">
-            Henüz İş Verilmemiş
-
-
+        <div class="alert alert-secondary text-center" role="alert">
+            Henüz Görev Verilmemiş
         </div>
     }
 </div>

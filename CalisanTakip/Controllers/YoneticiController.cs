@@ -194,5 +194,29 @@ namespace CalisanTakip.Controllers
                 return RedirectToAction("Index", "Login");
             }
         }
+        public IActionResult GetCalendarEvents()
+        {
+            var isDurumlar = _context.Islers
+                .Where(i => i.IletilenTarih.HasValue) // Tarihi olmayan kayıtları hariç tutuyoruz
+                .Select(i => new
+                {
+                    title = i.IsBaslik,
+                    description = i.IsAciklama, // Açıklama eklendi
+                    start = i.IletilenTarih.Value.ToString("yyyy-MM-ddTHH:mm:ss"),
+                    end = i.IletilenTarih.HasValue && i.TahminiSure.HasValue
+                        ? i.IletilenTarih.Value.AddMinutes(i.TahminiSure.Value).ToString("yyyy-MM-ddTHH:mm:ss")
+                        : (string)null
+                })
+                .ToList();
+
+            return Json(isDurumlar);
+        }
+
+
+
+
+
+
     }
+
 }

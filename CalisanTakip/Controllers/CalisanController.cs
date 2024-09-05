@@ -15,7 +15,7 @@ namespace CalisanTakip.Controllers
 
         public CalisanController()
         {
-            _context = new IsTakipDbContext();
+            _context = new IsTakipDbContext(); 
         }
 
         public IActionResult Index()
@@ -65,6 +65,31 @@ namespace CalisanTakip.Controllers
 
             return RedirectToAction("Yap", "Calisan");
         }
+        public IActionResult GetCalendarEvents()
+        {
+            // Veritabanından işleri alıyoruz
+            var isDurumlar = _context.Islers
+                .Select(i => new IsDurum
+                {
+                    isBaslik = i.IsBaslik,
+                    isAciklama = i.IsAciklama,
+                    iletilenTarih = i.IletilenTarih,
+                    yapilanTarih = i.YapilanTarih,
+                   
+                }).ToList();
+
+            // İşleri FullCalendar için uygun formata çeviriyoruz
+            var events = isDurumlar.Select(d => new
+            {
+                title = d.isBaslik,
+                start = d.iletilenTarih?.ToString("yyyy-MM-ddTHH:mm:ss"), // Başlangıç zamanı
+                end = d.yapilanTarih?.ToString("yyyy-MM-ddTHH:mm:ss"),
+            });
+
+            return Json(events); // JSON formatında döndürüyoruz
+        }
+
+
 
 
         public IActionResult Yap()

@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İş Takip Yönetici</title>
+    <title>Görev Takip Yönetici</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,98 +17,86 @@
         }
 
         .navbar {
-            background-color: #333;
-            overflow: hidden;
+            background-color: #2e8b57; /* Koyu yeşil arka plan rengi */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 1rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: #ffffff; /* Beyaz metin rengi */
         }
 
+            .navbar img {
+                background-color: #ffffff; /* Görselin arka planını koyu gri yap */
+                padding: 5px;
+                border-radius: 8px; /* Köşe yuvarlama */
+            }
+
             .navbar a {
-                float: left;
-                display: block;
-                color: white;
-                text-align: center;
-                padding: 14px 20px;
+                color: #ffffff; /* Beyaz metin rengi */
                 text-decoration: none;
+                padding: 14px 20px;
                 font-size: 17px;
+                font-weight: 500;
+                border-radius: 4px;
+                transition: background-color 0.3s, color 0.3s;
             }
 
                 .navbar a:hover {
-                    background-color: #575757;
+                    background-color: #495057; /* Hover arka plan rengi */
+                    color: #ffffff; /* Hover'da beyaz renk */
                 }
 
                 .navbar a.active {
-                    background-color: #4CAF50;
+                    background-color: #ffffff; /* Beyaz arka plan rengi */
+                    color: #2e8b57; /* Koyu yeşil metin rengi */
                 }
 
             .navbar .search-container {
-                float: right;
+                display: flex;
+                align-items: center;
             }
 
             .navbar input[type="text"] {
                 padding: 6px;
-                margin-top: 8px;
-                margin-right: 16px;
                 font-size: 17px;
                 border: none;
                 border-radius: 4px;
+                margin-right: 10px;
             }
 
             .navbar button {
-                float: right;
-                padding: 6px 10px;
-                margin-top: 8px;
-                margin-right: 16px;
-                background-color: #4CAF50;
+                padding: 6px 12px;
+                background-color: #28a745; /* Buton arka plan rengi */
                 color: white;
                 font-size: 17px;
                 border: none;
                 border-radius: 4px;
                 cursor: pointer;
+                transition: background-color 0.3s;
             }
 
                 .navbar button:hover {
-                    background-color: #45a049;
+                    background-color: #218838; /* Buton hover rengi */
                 }
 
         .container {
             margin: 50px auto;
             max-width: 1200px;
             padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff; /* Beyaz arka plan rengi */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hafif gölge efekti */
             border-radius: 8px;
-        }
-
-        
-        @@media screen and (max-width: 600px) {
-            .navbar a, .navbar input[type="text"], .navbar button {
-                float: none;
-                display: block;
-                text-align: left;
-                width: 100%;
-                margin: 0;
-                padding: 14px;
-            }
-
-            .navbar input[type="text"] {
-                border-radius: 0;
-            }
         }
     </style>
 </head>
 <body>
     <nav class="navbar">
-        <a href="#" class="active">İş Takip</a>
+        <img src="~/images/uludagenerji (1).png" alt="" style="height: 40px;">
         @Html.ActionLink("Anasayfa", "Index", "Yonetici", null, new { @class = "" })
         @Html.ActionLink("İş Ata", "Ata", "Yonetici", null, new { @class = "" })
         @Html.ActionLink("İş Takip", "Takip", "Yonetici", null, new { @class = "" })
-        @Html.ActionLink("Çıkış","Index","Yonetici",null,new {@class= "" })
-        <div class="search-container">
-            <form action="/action_page.php">
-                <input type="text" placeholder="Ara..." name="search">
-                <button type="submit">Ara</button>
-            </form>
-        </div>
+        @Html.ActionLink("Çıkış", "Index", "Login", null, new { @class = "" })
     </nav>
 
     <main role="main" class="container">

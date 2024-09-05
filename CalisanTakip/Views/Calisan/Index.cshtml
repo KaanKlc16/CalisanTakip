@@ -1,8 +1,6 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LayoutCalisan.cshtml";
-
 
     var personelAdSoyad = ViewBag.PersonelAdSoyad as string;
     var personelId = ViewBag.PersonelId as int?;
@@ -13,39 +11,69 @@
 
 <h1>Kullanıcı Bilgileri</h1>
 
-
 <p>Yönetici Ad Soyad: @personelAdSoyad</p>
 <p>Personel ID: @personelId</p>
 <p>Birim ID: @personelBirimId</p>
 <p>Yetki Tür ID: @personelYetkiTurID</p>
 <p>Birim Ad: @birimAd </p>
+
 <div class="container mt-5">
     <div class="row">
-        @foreach(var i in ViewBag.Isler)
+        @foreach (var i in ViewBag.Isler)
         {
-            using (Html.BeginForm("Index", "Calisan", FormMethod.Post, new {@class="col-lg-6 col-md-6 col-sm-12 col-xs-12"}))
+            using (Html.BeginForm("Index", "Calisan", FormMethod.Post, new { @class = "col-lg-6 col-md-6 col-sm-12 col-xs-12" }))
             {
                 <div class="card border-info">
                     <div class="card-header text-center">
                         Yeni Görev !!!
                     </div>
                     <div class="card-body">
-                        <input type="hidden" name="isId" value="@i.IsId"/>
+                        <input type="hidden" name="isId" value="@i.IsId" />
 
                         <div class=" mb-3">
                             @i.IsBaslik
-
                         </div>
-                     </div>
+                    </div>
 
-                        <div class="card-footer">
-                            <button type="submit"class="btn btn-outline-info">
-                                Okundu Olarak İşaretle
-                            </button>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-outline-info">
+                            Okundu Olarak İşaretle
+                        </button>
                     </div>
                 </div>
-                <br/>
+                <br />
             }
         }
     </div>
 </div>
+
+h1>Takvim</h1>
+
+<div id="calendar"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet" />
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: '/Yonetici/GetCalendarEvents', // Etkinlikleri alacağımız endpoint
+            locale: 'tr',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            eventTimeFormat: { // Etkinlik zaman formatı
+                hour: '2-digit',
+                minute: '2-digit',
+                meridiem: false
+            }
+        });
+
+        calendar.render(); // Takvimi render ediyoruz
+    });
+</script>

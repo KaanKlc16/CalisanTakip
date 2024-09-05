@@ -1,30 +1,127 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Takip";
     Layout = "~/Views/Shared/_LayoutYonetici.cshtml";
 }
 
-<div>class="container mt-5"<div>
+<!-- Stil -->
+<style>
+    /* Genel Arka Plan */
+    body {
+        background-color: #2c3e50; /* Koyu mavi arka plan */
+        color: #333; /* Koyu gri yazı rengi */
+    }
 
-        <h3>@ViewBag.birimad Birimi için Çalışan İşlerini Listeleme</h3>
-</div>
+    /* Container Arka Planı */
+    .container {
+        background-color: #ffffff; /* Beyaz arka plan */
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Başlık */
+    h3, h4 {
+        color: #333; /* Koyu gri yazı rengi */
+    }
+
+    /* Select kutusu ve buton */
+    .form-select, .btn-outline-secondary {
+        background-color: #f5f5f5; /* Açık gri arka plan */
+        color: #333; /* Koyu gri yazı rengi */
+        border: 1px solid #ccc;
+    }
+
+        .form-select:hover, .btn-outline-secondary:hover {
+            background-color: #e0e0e0; /* Daha açık gri arka plan */
+            color: #333;
+            border-color: #bbb;
+        }
+
+    /* Buton stili */
+    .btn-outline-secondary {
+        transition: background-color 0.3s, border-color 0.3s;
+        padding: 10px 20px;
+    }
+
+    /* Tablo Stili */
+    .table {
+        color: #333; /* Koyu gri yazı rengi */
+        background-color: #ffffff; /* Beyaz arka plan */
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+        .table th {
+            background-color: #3498db; /* Mavi başlık rengi */
+            color: white;
+        }
+
+        .table td {
+            background-color: #f9f9f9; /* Açık gri hücre arka planı */
+            color: #333; /* Koyu gri yazı rengi */
+        }
+
+    .table-warning td {
+        background-color: #e67e22; /* Turuncu arka plan */
+        color: white;
+    }
+
+    /* Hover efektleri */
+    .table tbody tr:hover {
+        background-color: #d0e9f4; /* Açık mavi hover arka planı */
+        color: #333;
+    }
+</style>
+
+<!-- İçerik -->
+<div class="container mt-5">
+    <h3>@ViewBag.BirimAd Birimi için Çalışan Görev Listeleme</h3>
+
     @using (Html.BeginForm("Takip", "Yonetici", FormMethod.Post))
     {
-        <div class="mb-3"> 
+        <div class="mb-3">
             <select class="form-select" name="selectPer" id="selectPer">
                 @foreach (var personel in ViewBag.personeller)
                 {
-                    <option value="@personel.PersonelId">value="@personel.PersonelAdSoyad  </option>
+                    <option value="@personel.PersonelId">@personel.PersonelAdSoyad</option>
                 }
-            
-                </select>
-            </div>
+            </select>
+        </div>
+
         <div class="mb-3">
-            <button class="btn btn-outline-secondary"type="submit">
-               Atanan İşleri Getir
+            <button class="btn btn-outline-secondary" type="submit">
+                Atanan Görevleri Getir
             </button>
-            
+        </div>
+    }
+
+    @if (ViewBag.Isler != null)
+    {
+        <div class="mt-5">
+            <h4>Atanan Görevler</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Başlık</th>
+                        <th>Açıklama</th>
+                        <th>Tarih</th>
+                        <th>Durum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var isler in ViewBag.Isler)
+                    {
+                        <tr class="@((isler.IsOkunma) ? "" : "table-warning")">
+                            <td>@isler.IsBaslik</td>
+                            <td>@isler.IsAciklama</td>
+                            <td>@isler.IletilenTarih?.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                @(isler.IsOkunma ? "Okundu" : "Okunmadı")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     }
 </div>
-
