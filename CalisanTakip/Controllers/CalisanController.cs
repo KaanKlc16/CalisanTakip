@@ -38,13 +38,34 @@ namespace CalisanTakip.Controllers
                 ViewBag.PersonelYetkiTurID = personelYetkiTurID;
                 ViewBag.BirimAd = birimAd;
 
+                var isler = _context.Islers
+     .Where(i => i.IsPersonelId == personelId && i.IsOkunma == false)
+     .OrderByDescending(i => i.IletilenTarih)
+     .ToList();
+
+                ViewBag.Isler = isler;
                 return View();
             }
             else
             {
-                return RedirectToAction("Index", "Login");
+                return RedirectToAction("Index", "Calisan");
             }
         }
+        [HttpPost]
+        public IActionResult Index(int isId)
+        {
+            var tekIs = _context.Islers
+                .FirstOrDefault(i => i.IsId == isId);
+
+            if (tekIs != null)
+            {
+                tekIs.IsOkunma = true;
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Yap", "Calisan");
+        }
+
 
         public IActionResult Yap()
         {
@@ -68,7 +89,7 @@ namespace CalisanTakip.Controllers
         }
 
         [HttpPost]
-        public IActionResult Yap(int isId,string isYorum,DateTime tahminiSure)
+        public IActionResult Yap(int isId,string isYorum, int tahminiSureSaat, int tahminiSureDakika)
         {
             var tekIs = _context.Islers
                 .Where(i => i.IsId == isId)
@@ -79,11 +100,14 @@ namespace CalisanTakip.Controllers
                 if (isYorum == "") isYorum = "Çalışan Yorum Yapmadı";
                 tekIs.YapilanTarih = DateTime.Now;
                 tekIs.IsDurumId = 2;
-                
-                if(tahminiSure == DateTime.MinValue)
-        tahminiSure = DateTime.Now.AddHours(1);
+
+                TimeSpan tahminiSure = new TimeSpan(tahminiSureSaat, tahminiSureDakika, 0);
+                tekIs.TahminiSure = (int)tahminiSure.TotalMinutes;
+
+
+
                 tekIs.IsYorum = isYorum;
-                tekIs.TahminiSure = tahminiSure;
+                
                 try
                 {
                     _context.SaveChanges();
@@ -125,7 +149,7 @@ namespace CalisanTakip.Controllers
 
 
                 IsDurumModel model = new IsDurumModel();
-
+                 
                 foreach (var i in isler)
                 {
                     IsDurum isDurum = new IsDurum

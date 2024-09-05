@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 using Microsoft.EntityFrameworkCore;
 
 namespace CalisanTakip.Repository.Models;
@@ -35,8 +34,11 @@ public partial class Isler
     [Column("isYorum")]
     public string? IsYorum { get; set; }
 
-    [Column("tahminiSure", TypeName = "datetime")]
-    public DateTime? TahminiSure { get; set; }
+    [Column("tahminiSure")]
+    public int? TahminiSure { get; set; }
+
+    [Column("isOkunma")]
+    public bool? IsOkunma { get; set; }
 
     [ForeignKey("IsDurumId")]
     [InverseProperty("Islers")]

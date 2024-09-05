@@ -108,7 +108,7 @@ namespace CalisanTakip.Controllers
             };
              
              */
-            
+            model.IsOkunma = false;
             model.IletilenTarih = DateTime.Now;
             model.IsDurumId = 1;
 

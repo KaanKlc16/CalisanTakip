@@ -17,11 +17,14 @@
                     <div class="mb-3">
                         <label for="isYorum" class="form-label">Yorum Giriniz</label>
                         <input type="text" class="form-control" name="isYorum" />
-
                     </div>
                     <div class="mb-3">
-                        <label for="tahminiSure" class="form-label">Tahmini Süre (saat)</label>
-                        <input type="number" class="form-control" name="tahminiSure" min="0" step="0.1" placeholder="Örn: 1.5" />
+                        <label for="tahminiSureSaat" class="form-label">Tahmini Süre (Saat)</label>
+                        <input type="number" class="form-control" name="tahminiSureSaat" min="0" step="1" placeholder="Saat" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="tahminiSureDakika" class="form-label">Tahmini Süre (Dakika)</label>
+                        <input type="number" class="form-control" name="tahminiSureDakika" min="0" max="59" step="1" placeholder="Dakika" />
                     </div>
                     <input type="hidden" name="isId" value="@i.IsId" />
                 </div>

@@ -19,3 +19,33 @@
 <p>Birim ID: @personelBirimId</p>
 <p>Yetki Tür ID: @personelYetkiTurID</p>
 <p>Birim Ad: @birimAd </p>
+<div class="container mt-5">
+    <div class="row">
+        @foreach(var i in ViewBag.Isler)
+        {
+            using (Html.BeginForm("Index", "Calisan", FormMethod.Post, new {@class="col-lg-6 col-md-6 col-sm-12 col-xs-12"}))
+            {
+                <div class="card border-info">
+                    <div class="card-header text-center">
+                        Yeni Görev !!!
+                    </div>
+                    <div class="card-body">
+                        <input type="hidden" name="isId" value="@i.IsId"/>
+
+                        <div class=" mb-3">
+                            @i.IsBaslik
+
+                        </div>
+                     </div>
+
+                        <div class="card-footer">
+                            <button type="submit"class="btn btn-outline-info">
+                                Okundu Olarak İşaretle
+                            </button>
+                    </div>
+                </div>
+                <br/>
+            }
+        }
+    </div>
+</div>
