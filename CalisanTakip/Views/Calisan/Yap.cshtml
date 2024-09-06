@@ -3,36 +3,110 @@
     Layout = "~/Views/Shared/_LayoutCalisan.cshtml";
 }
 
-<div class="container mt-5">
-    @foreach (var i in ViewBag.isler)
-    {
-        @using (Html.BeginForm("Yap", "Calisan", FormMethod.Post))
-        {
-            <div class="card">
-                <div class="card-header text-center">
-                    @i.IsBaslik
-                </div>
-                <div class="card-header text-body">
-                    İş Açıklama: @i.IsAciklama
-                    <div class="mb-3">
-                        <label for="isYorum" class="form-label">Yorum Giriniz</label>
-                        <input type="text" class="form-control" name="isYorum" />
-                    </div>
-                    <div class="mb-3">
-                        <label for="tahminiSureSaat" class="form-label">Tahmini Süre (Saat)</label>
-                        <input type="number" class="form-control" name="tahminiSureSaat" min="0" step="1" placeholder="Saat" />
-                    </div>
-                    <div class="mb-3">
-                        <label for="tahminiSureDakika" class="form-label">Tahmini Süre (Dakika)</label>
-                        <input type="number" class="form-control" name="tahminiSureDakika" min="0" max="59" step="1" placeholder="Dakika" />
-                    </div>
-                    <input type="hidden" name="isId" value="@i.IsId" />
-                </div>
-                <div class="card-footer">
-                    <button type="submit" class="btn btn-outline-success">Tamamla</button>
-                </div>
-                <br />
-            </div>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            background-color: #2c3e50; /* Genel arka plan rengi */
+            color: #ffffff; /* Genel metin rengi */
+            font-family: Arial, sans-serif;
         }
-    }
-</div>
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .card {
+            background-color: #ffffff; /* Kart arka plan rengi */
+            color: #2c3e50; /* Kart içeriği rengi */
+            border-radius: 8px; /* Köşeleri yuvarla */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Hafif gölge efekti */
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            background: linear-gradient(45deg, #0b3d91, #145214);
+            color: #ffffff; /* Başlık kısmının metin rengi */
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: bold;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-footer {
+            background-color: #f1f1f1; /* Footer arka plan rengi */
+            text-align: right;
+            padding: 10px 20px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .form-control {
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            padding: 10px;
+        }
+
+        .btn-outline-success {
+            color: #1abc9c;
+            border: 2px solid #1abc9c;
+            border-radius: 6px;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-outline-success:hover {
+            background-color: #1abc9c;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        @foreach (var i in ViewBag.isler)
+        {
+            @using (Html.BeginForm("Yap", "Calisan", FormMethod.Post))
+            {
+                <div class="card">
+                    <div class="card-header">
+                        @i.IsBaslik
+                    </div>
+                    <div class="card-body">
+                        <p>İş Açıklama: @i.IsAciklama</p>
+
+                        <div class="form-group">
+                            <label for="isYorum">Yorum Giriniz</label>
+                            <input type="text" class="form-control" name="isYorum" placeholder="Yorumunuzu yazınız" />
+                        </div>
+                        <div class="form-group">
+                            <label for="tahminiSureSaat">Tahmini Süre (Saat)</label>
+                            <input type="number" class="form-control" name="tahminiSureSaat" min="0" step="1" placeholder="Saat" />
+                        </div>
+                        <div class="form-group">
+                            <label for="tahminiSureDakika">Tahmini Süre (Dakika)</label>
+                            <input type="number" class="form-control" name="tahminiSureDakika" min="0" max="59" step="1" placeholder="Dakika" />
+                        </div>
+
+                        <input type="hidden" name="isId" value="@i.IsId" />
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-outline-success">Tamamla</button>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+</body>
+</html>

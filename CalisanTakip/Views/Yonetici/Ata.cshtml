@@ -5,32 +5,32 @@
     Layout = "~/Views/Shared/_LayoutYonetici.cshtml";
 }
 
-<!-- Stil -->
+
 <style>
-    /* Genel Arka Plan */
+    
     body {
         background-color: #2c3e50;
     }
 
-    /* Kart Başlığı */
+   
     .bg-gradient-primary {
         background: linear-gradient(135deg, #2b2e4a, #3e50b4);
         color: white;
     }
 
-    /* Sayfa Başlığı */
+    
     .text-gradient {
         font-weight: bold;
         color: black;
     }
 
-    /* Form Etiketleri (Başlıklar ve Açıklamalar) */
+    
     .form-label {
         font-weight: bold;
         color: black;
     }
 
-    /* Custom Buton */
+   
     .custom-btn {
         background: linear-gradient(135deg, #28a745, #218838);
         color: white;
@@ -50,7 +50,7 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
 
-    /* Kart Gölgeleri */
+    
     .shadow-sm {
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
@@ -63,22 +63,22 @@
         border-radius: 1rem;
     }
 
-    /* Kart İçeriği Beyaz Arka Plan */
+  
     .card-body {
         background-color: white;
     }
 
-    /* Buton Ortalayıcı */
+   
     .center-btn {
         display: flex;
         justify-content: center;
     }
 </style>
 
-<!-- Sayfa Başlığı -->
+
 <h1 class="text-center my-4 display-4 fw-bold text-gradient">Görev Atama</h1>
 
-<!-- Kart yapısı ve form -->
+
 <div class="container mt-5">
     <div class="card shadow-lg border-0 rounded-3">
         <div class="card-header bg-gradient-primary text-white text-center py-4">
@@ -110,7 +110,7 @@
                     @Html.ValidationMessageFor(model => model.IsPersonelId, "", new { @class = "text-danger" })
                 </div>
 
-                <!-- İş Ata Butonu Ortada -->
+                
                 <div class="center-btn">
                     <button type="submit" class="custom-btn">
                         <i class="fas fa-tasks me-2"></i> Görev Ata

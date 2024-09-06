@@ -3,12 +3,12 @@
     Layout = "~/Views/Shared/_LayoutYonetici.cshtml";
 }
 
-<!-- Sayfa Başlığı -->
+
 <h1 class="text-center my-4 text-white">Takvim</h1>
 
 <div id="calendar"></div>
 
-<!-- Modal yapısı -->
+
 <div id="eventModal" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -47,7 +47,7 @@
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
             eventClick: function (info) {
-                // Etkinliğe tıklandığında modalı açıyoruz
+               
                 document.getElementById('modalTitle').innerText = info.event.title;
                 document.getElementById('modalDescription').innerText = info.event.extendedProps.description;
                 var modal = new bootstrap.Modal(document.getElementById('eventModal'));
@@ -70,51 +70,51 @@
 <!-- Stil -->
 <style>
     body {
-        background-color: #2c3e50; /* Koyu mavi arka plan rengi */
+        background-color: #2c3e50; 
     }
 
     #calendar {
-        background-color: #ffffff; /* Beyaz arka plan rengi */
+        background-color: #ffffff;
         padding: 20px;
         border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hafif gölge efekti */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
     }
 
     h1 {
-        color: #ffffff; /* Beyaz başlık rengi */
+        color: #ffffff; 
     }
 
     <!-- Stil -->
     <style >
     .navbar {
-        background-color: #333; /* Koyu gri arka plan rengi */
-        padding: 0.8rem 1rem; /* Üst ve alt boşluk */
+        background-color: #333; 
+        padding: 0.8rem 1rem;
     }
 
     .navbar-brand {
-        color: #ffffff; /* Beyaz metin rengi */
-        font-weight: bold; /* Kalın yazı stili */
+        color: #ffffff; 
+        font-weight: bold; 
     }
 
     .navbar-nav .nav-link {
-        color: #dcdcdc; /* Açık gri metin rengi */
-        font-weight: 500; /* Orta kalınlıkta yazı stili */
+        color: #dcdcdc; 
+        font-weight: 500; 
     }
 
         .navbar-nav .nav-link:hover {
-            color: #ffffff; /* Hover'da beyaz renk */
-            background-color: #444; /* Hover arka plan rengi */
-            border-radius: 0.25rem; /* Köşe yuvarlama */
-            transition: background-color 0.3s ease; /* Geçiş efekti */
+            color: #ffffff; 
+            background-color: #444; 
+            border-radius: 0.25rem; 
+            transition: background-color 0.3s ease; 
         }
 
     .navbar-toggler {
-        border: none; /* Toggler kenarını kaldır */
+        border: none; 
     }
 
     .navbar-toggler-icon {
         background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgdmlld0JveD0iMCAwIDE4IDE4Ij48cGF0aCBkPSJNMTIgMTguNTY5NiwxMS41IDAsMCAwIDAsMCAwLTExLjU2OSwwLTcsNyA3LDcsOCwgMCwgMCwgMCAxMCAwTDEyIDE4LjU2OTIgMCAwLDE2LDAsOCw4Ij48L3BhdGgiLz48cGF0aCBkPSJNMTIgNiwwIDAsMCAwIDAsMCAwLTExLjU2OSwwLTcsNyA3LDcsOCwgMCwgMCwgMCAxMCAwTDEyIDguNTY5NiAwIDAsMTYsMCw4LDgiPjwvcGF0aD48cGF0aCBkPSJNMTIgMCAwIDAsMCAwIDAsMCAwLTEyLDEwIiBmaWxsPSJub25lIi8+PC9zdmc+'); /* Menü ikonunun stili */
-        background-size: 100% 100%; /* İkon boyutlandırma */
+        background-size: 100% 100%; 
     }
 </style>
 

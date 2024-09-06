@@ -9,71 +9,143 @@
     var birimAd = ViewBag.BirimAd as string;
 }
 
-<h1>Kullanıcı Bilgileri</h1>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kullanıcı Bilgileri</title>
+    <style>
+        body {
+            background-color: #2c3e50;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
 
-<p>Yönetici Ad Soyad: @personelAdSoyad</p>
-<p>Personel ID: @personelId</p>
-<p>Birim ID: @personelBirimId</p>
-<p>Yetki Tür ID: @personelYetkiTurID</p>
-<p>Birim Ad: @birimAd </p>
+        h1 {
+            text-align: center;
+            color: #000000; 
+            margin-top: 20px;
+        }
 
-<div class="container mt-5">
-    <div class="row">
-        @foreach (var i in ViewBag.Isler)
-        {
-            using (Html.BeginForm("Index", "Calisan", FormMethod.Post, new { @class = "col-lg-6 col-md-6 col-sm-12 col-xs-12" }))
+        .container-white {
+            background-color: #ffffff; 
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-top: 30px;
+            color: #000000; 
+        }
+
+        .card {
+            background-color: #ffffff; 
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            color: #34495e; 
+        }
+
+        .card-header {
+            background: linear-gradient(45deg, #0b3d91, #145214);
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .card-body {
+            color: #34495e; 
+        }
+
+        .card-footer {
+            text-align: center;
+        }
+
+        .btn-outline-info {
+            color: #004d00; 
+            border: 2px solid #004d00; 
+            transition: background-color 0.3s ease;
+        }
+
+            .btn-outline-info:hover {
+                background-color: #004d00; 
+                color: white;
+            }
+
+        #calendar {
+            background-color: #ffffff; 
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            color: #000000; 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container-white">
+        <h1>Kullanıcı Bilgileri</h1>
+        <p>Ad Soyad: @personelAdSoyad</p>
+        <p>Personel ID: @personelId</p>
+        <p>Birim ID: @personelBirimId</p>
+        <p>Yetki Tür ID: @personelYetkiTurID</p>
+        <p>Birim Ad: @birimAd</p>
+
+        <div class="row">
+            @foreach (var i in ViewBag.Isler)
             {
-                <div class="card border-info">
-                    <div class="card-header text-center">
-                        Yeni Görev !!!
-                    </div>
-                    <div class="card-body">
-                        <input type="hidden" name="isId" value="@i.IsId" />
-
-                        <div class=" mb-3">
-                            @i.IsBaslik
+                using (Html.BeginForm("Index", "Calisan", FormMethod.Post, new { @class = "col-lg-6 col-md-6 col-sm-12 col-xs-12" }))
+                {
+                    <div class="card">
+                        <div class="card-header text-center">
+                            Yeni Görev !!!
+                        </div>
+                        <div class="card-body">
+                            <input type="hidden" name="isId" value="@i.IsId" />
+                            <div class="mb-3">
+                                <strong>@i.IsBaslik</strong>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-outline-info">
+                                Okundu Olarak İşaretle
+                            </button>
                         </div>
                     </div>
-
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-outline-info">
-                            Okundu Olarak İşaretle
-                        </button>
-                    </div>
-                </div>
-                <br />
+                }
             }
-        }
+        </div>
     </div>
-</div>
 
-h1>Takvim</h1>
+    <div class="container-white">
+        <h1>Takvim</h1>
+        <div id="calendar"></div>
+    </div>
 
-<div id="calendar"></div>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet" />
 
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: '/Yonetici/GetCalendarEvents',
+                locale: 'tr',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                eventTimeFormat: {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    meridiem: false
+                }
+            });
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            events: '/Yonetici/GetCalendarEvents', // Etkinlikleri alacağımız endpoint
-            locale: 'tr',
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            },
-            eventTimeFormat: { // Etkinlik zaman formatı
-                hour: '2-digit',
-                minute: '2-digit',
-                meridiem: false
-            }
+            calendar.render();
         });
+    </script>
 
-        calendar.render(); // Takvimi render ediyoruz
-    });
-</script>
+</body>
+</html>

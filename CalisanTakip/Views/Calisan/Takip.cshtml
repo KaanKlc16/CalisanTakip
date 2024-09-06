@@ -5,22 +5,69 @@
     Layout = "~/Views/Shared/_LayoutCalisan.cshtml";
 }
 
-<h1>Takip</h1>
+<h1 class="text-center text-white">Takip</h1>
 
-@foreach (var isDurum in Model.isDurumlar)
-{
-    <div class="card">
-        <div class="card-header bg-black text-center text-white">
-            @isDurum.isBaslik
+<div class="container mt-4">
+    @foreach (var isDurum in Model.isDurumlar)
+    {
+        <div class="card mb-3 shadow-lg">
+            <div class="card-header bg-darkgreen text-center text-white">
+                <h5 class="mb-0">@isDurum.isBaslik</h5>
+            </div>
+            <div class="card-body bg-light">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>Görev Açıklaması: </strong> @isDurum.isAciklama
+                    </li>
+                    <li class="list-group-item">  <strong>Görevin İletildiği Tarih: </strong> @isDurum.iletilenTarih</li>
+                    <li class="list-group-item">  <strong>Görevin Yapıldığı Tarih: </strong> @isDurum.yapilanTarih</li>
+                    <li class="list-group-item"> <strong>Görev Durumu: </strong> @isDurum.durumAd</li>
+                </ul>
+            </div>
         </div>
-        <div class="card-body">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">@isDurum.isAciklama</li>
-                <li class="list-group-item">@isDurum.iletilenTarih</li>
-                <li class="list-group-item">@isDurum.yapilanTarih</li>
-               <li class="list-group-item">@isDurum.durumAd</li>
-            </ul>
-        </div>
-        <br />
-    </div>
-}
+    }
+</div>
+
+<style>
+    body {
+        background-color: #2c3e50; 
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        margin-top: 20px;
+        color: white;
+    }
+
+    .card {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .card-header {
+        font-weight: bold;
+        background: linear-gradient(45deg, #0b3d91, #145214);
+        color: white; 
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .list-group-item {
+        background-color: #ecf0f1; 
+        border: none;
+        color: #2c3e50;
+    }
+
+        .list-group-item + .list-group-item {
+            border-top: 1px solid #bdc3c7;
+        }
+
+        
+        .list-group-item strong {
+            color: #34495e; 
+        }
+</style>
