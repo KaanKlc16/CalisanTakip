@@ -36,6 +36,10 @@ public partial class Isler
 
     [Column("tahminiSure")]
     public int? TahminiSure { get; set; }
+    [Column("isBaslangic")]
+    public DateTime? IsBaslangic { get; set; }
+    [Column("isBitirmeSure")]
+    public DateTime? IsBitirmeSure { get; set; }
 
     [Column("isOkunma")]
     public bool? IsOkunma { get; set; }

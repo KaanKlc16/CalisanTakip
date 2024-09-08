@@ -67,30 +67,43 @@ namespace CalisanTakip.Controllers
         }
         public IActionResult GetCalendarEvents()
         {
-            // Veritabanından işleri alıyoruz
+            var birimId = HttpContext.Session.GetInt32("PersonelBirimId");
+            // İşlerinizi alıp IsDurum modeline dönüştürün
             var isDurumlar = _context.Islers
-                .Select(i => new IsDurum
-                {
-                    isBaslik = i.IsBaslik,
-                    isAciklama = i.IsAciklama,
-                    iletilenTarih = i.IletilenTarih,
-                    yapilanTarih = i.YapilanTarih,
-                   
-                }).ToList();
+                 .Include(i => i.IsPersonel)  // Personeller tablosunu dahil ediyoruz
+                 .Include(i => i.IsDurum)     // Durumlar tablosunu dahil ediyoruz
+                 .Where(i => i.IsPersonel.PersonlBirimId == birimId)
+                 .Select(i => new
+                 {
+                     i.IsId,                // IsId'yi burada alıyoruz
+                     i.IsBaslik,
+                     i.IsAciklama,
+                     i.IsBaslangic,
+                     i.IsBitirmeSure,
+                     personelAdSoyad = i.IsPersonel.PersonelAdSoyad,
+                     i.TahminiSure
 
-            // İşleri FullCalendar için uygun formata çeviriyoruz
+                 })
+                 .ToList();
+
+
+            // Takvim olayları için gerekli verileri hazırlıyoruz
             var events = isDurumlar.Select(d => new
             {
-                title = d.isBaslik,
-                start = d.iletilenTarih?.ToString("yyyy-MM-ddTHH:mm:ss"), // Başlangıç zamanı
-                end = d.yapilanTarih?.ToString("yyyy-MM-ddTHH:mm:ss"),
+                id = d.IsId,  // Burada IsId'yi kullanıyoruz
+                calendarId = "1",
+                title = d.IsBaslik + " - " + d.personelAdSoyad,
+                category = "time",
+                start = d.IsBaslangic?.ToString("yyyy-MM-ddTHH:mm:ss"),
+                end = d.IsBitirmeSure?.ToString("yyyy-MM-ddTHH:mm:ss"),
+
+                description = d.IsAciklama + " - Tahmini Süre: " + d.TahminiSure,
+                PersonelAdSoyad = d.personelAdSoyad
             });
 
-            return Json(events); // JSON formatında döndürüyoruz
+
+            return Json(events);  // JSON formatında döndürüyoruz
         }
-
-
-
 
         public IActionResult Yap()
         {
@@ -186,9 +199,6 @@ namespace CalisanTakip.Controllers
                         durumAd = i.DurumAd,
                         isYorum = i.IsYorum
 
-
-                        // durumAd=i.Durumlars.DurumAd, durum aayrla
-                        // durumAd = i.isler.DurumAd
 
                     };
                     model.isDurumlar.Add(isDurum);

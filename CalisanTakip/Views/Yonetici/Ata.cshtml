@@ -5,32 +5,26 @@
     Layout = "~/Views/Shared/_LayoutYonetici.cshtml";
 }
 
-
 <style>
-    
     body {
         background-color: #2c3e50;
     }
 
-   
     .bg-gradient-primary {
         background: linear-gradient(135deg, #2b2e4a, #3e50b4);
         color: white;
     }
 
-    
     .text-gradient {
         font-weight: bold;
         color: black;
     }
 
-    
     .form-label {
         font-weight: bold;
         color: black;
     }
 
-   
     .custom-btn {
         background: linear-gradient(135deg, #28a745, #218838);
         color: white;
@@ -50,7 +44,6 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
 
-    
     .shadow-sm {
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
@@ -63,60 +56,55 @@
         border-radius: 1rem;
     }
 
-  
     .card-body {
         background-color: white;
     }
 
-   
     .center-btn {
         display: flex;
         justify-content: center;
     }
 </style>
 
+<h2 class="mb-4">Görev Ata</h2>
 
-<h1 class="text-center my-4 display-4 fw-bold text-gradient">Görev Atama</h1>
+<div class="card shadow-lg rounded-3">
+    <div class="card-body">
+        <form asp-action="Ata">
+            <div class="mb-3">
+                <label asp-for="IsBaslik" class="form-label">Görev Başlığı</label>
+                <input asp-for="IsBaslik" class="form-control" />
+            </div>
 
+            <div class="mb-3">
+                <label asp-for="IsAciklama" class="form-label">Görev Açıklaması</label>
+                <textarea asp-for="IsAciklama" class="form-control"></textarea>
+            </div>
 
-<div class="container mt-5">
-    <div class="card shadow-lg border-0 rounded-3">
-        <div class="card-header bg-gradient-primary text-white text-center py-4">
-            <h4 class="mb-0">@ViewBag.BirimAd Ekibi İçin Görev Atama İşlemi</h4>
-        </div>
-        <div class="card-body p-5">
-            @using (Html.BeginForm("Ata", "Yonetici", FormMethod.Post))
-            {
-                @Html.ValidationSummary(true, "", new { @class = "text-danger mb-4" })
+            <div class="mb-3">
+                <label asp-for="IsPersonelId" class="form-label">Çalışan Seçin</label>
+                <select asp-for="IsPersonelId" class="form-control">
+                    <option selected>Personel Seçin</option>
+                    @foreach (var personel in (List<CalisanTakip.Repository.Models.Personeller>)ViewBag.personeller)
+                    {
+                        <option value="@personel.PersonelId">@personel.PersonelAdSoyad</option>
+                    }
+                </select>
+            </div>
 
-                <div class="form-group mb-4">
-                    <label for="isBaslik" class="form-label fs-5">Görev Başlığını Giriniz</label>
-                    @Html.TextBoxFor(model => model.IsBaslik, new { @class = "form-control form-control-lg border-0 shadow-sm", placeholder = "Görev başlığı" })
-                    @Html.ValidationMessageFor(model => model.IsBaslik, "", new { @class = "text-danger" })
-                </div>
+            <div class="mb-3">
+                <label asp-for="IsBaslangic" class="form-label">Başlangıç Tarihi</label>
+                <input asp-for="IsBaslangic" class="form-control" type="datetime-local" />
+            </div>
 
-                <div class="form-group mb-4">
-                    <label for="isAciklama" class="form-label fs-5">Görev Açıklamasını Giriniz</label>
-                    @Html.TextAreaFor(model => model.IsAciklama, new { @class = "form-control form-control-lg border-0 shadow-sm", rows = 4, placeholder = "Görev açıklaması" })
-                    @Html.ValidationMessageFor(model => model.IsAciklama, "", new { @class = "text-danger" })
-                </div>
+            <div class="mb-3">
+                <label asp-for="IsBitirmeSure" class="form-label">Bitirme Süresi</label>
+                <input asp-for="IsBitirmeSure" class="form-control" type="datetime-local" />
+            </div>
 
-                <div class="form-group mb-4">
-                    <label for="isPersonelId" class="form-label fs-5">Çalışan Seçiniz</label>
-                    @Html.DropDownListFor(model => model.IsPersonelId,
-                             new SelectList(ViewBag.personeller, "PersonelId", "PersonelAdSoyad"),
-                             "Çalışan Seçiniz",
-                             new { @class = "form-select form-select-lg border-0 shadow-sm" })
-                    @Html.ValidationMessageFor(model => model.IsPersonelId, "", new { @class = "text-danger" })
-                </div>
-
-                
-                <div class="center-btn">
-                    <button type="submit" class="custom-btn">
-                        <i class="fas fa-tasks me-2"></i> Görev Ata
-                    </button>
-                </div>
-            }
-        </div>
+            <div class="center-btn">
+                <button type="submit" class="custom-btn shadow-sm">Görev Ata</button>
+            </div>
+        </form>
     </div>
 </div>

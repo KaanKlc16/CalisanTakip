@@ -96,18 +96,7 @@ namespace CalisanTakip.Controllers
 
                 return View(model);
             }
-            /* Böyle kullanmak yerine model olarak kullanmak yerine model. kullandım
-             
-                Isler yeniIs = new Isler
-            {
-                IsBaslik = isBaslik,
-                IsAciklama = isAciklama,
-                IsPersonelId = (int)secilenPersonelId,
-                IletilenTarih = DateTime.Now,
-                IsDurumId = 1
-            };
-             
-             */
+
             model.IsOkunma = false;
             model.IletilenTarih = DateTime.Now;
             model.IsDurumId = 1;
@@ -150,7 +139,6 @@ namespace CalisanTakip.Controllers
             var secilenPersonel = _context.Personellers
                                    .FirstOrDefault(p => p.PersonelId == selectPer);
 
-            // Newtonjson paketi kullandım session ile işlem yaparken
             HttpContext.Session.SetString("SecilenPersonel", JsonConvert.SerializeObject(secilenPersonel));
 
             return RedirectToAction("Listele", "Yonetici");
@@ -165,7 +153,6 @@ namespace CalisanTakip.Controllers
 
             if (personelYetkiTurID == 1)
             {
-               
                 try
                 {
                     var isler = _context.Islers
@@ -179,44 +166,72 @@ namespace CalisanTakip.Controllers
 
                     return View();
                 }
-                catch(Exception) 
+                catch (Exception)
                 {
-                   
                     return RedirectToAction("Takip", "Yonetici");
-
                 }
-
-                //İŞ DURUMUNU GOSTEREN KODU YAZMAYI UNUTMA !!!
-
-                }
+            }
             else
             {
                 return RedirectToAction("Index", "Login");
             }
         }
+
         public IActionResult GetCalendarEvents()
         {
+            var birimId = HttpContext.Session.GetInt32("PersonelBirimId");
+
+            // Isler tablosu ile IsPersonel ve IsDurum tablolarını ilişkilendiriyoruz
             var isDurumlar = _context.Islers
-                .Where(i => i.IletilenTarih.HasValue) // Tarihi olmayan kayıtları hariç tutuyoruz
+                .Include(i => i.IsPersonel)  // Personeller tablosunu dahil ediyoruz
+                .Include(i => i.IsDurum)     // Durumlar tablosunu dahil ediyoruz
+                .Where(i => i.IsPersonel.PersonlBirimId == birimId)
                 .Select(i => new
                 {
-                    title = i.IsBaslik,
-                    description = i.IsAciklama, // Açıklama eklendi
-                    start = i.IletilenTarih.Value.ToString("yyyy-MM-ddTHH:mm:ss"),
-                    end = i.IletilenTarih.HasValue && i.TahminiSure.HasValue
-                        ? i.IletilenTarih.Value.AddMinutes(i.TahminiSure.Value).ToString("yyyy-MM-ddTHH:mm:ss")
-                        : (string)null
+                    i.IsId,                // IsId'yi burada alıyoruz
+                    i.IsBaslik,
+                    i.IsAciklama,
+                    i.IsBaslangic,
+                    i.IsBitirmeSure,
+                    personelAdSoyad = i.IsPersonel.PersonelAdSoyad, // Personeller tablosundan veri alıyoruz
+                                       
                 })
                 .ToList();
 
-            return Json(isDurumlar);
+            // Takvim olayları için gerekli verileri hazırlıyoruz
+            var events = isDurumlar.Select(d => new
+            {
+                id = d.IsId,  // Burada IsId'yi kullanıyoruz
+                calendarId = "1",
+                title = d.IsBaslik + " - " + d.personelAdSoyad,
+                category = "time",
+                start = d.IsBaslangic?.ToString("yyyy-MM-ddTHH:mm:ss"),
+                end = d.IsBitirmeSure?.ToString("yyyy-MM-ddTHH:mm:ss"),
+                description = d.IsAciklama,
+                PersonelAdSoyad = d.personelAdSoyad
+            });
+
+            return Json(events);  // JSON olarak döndürüyoruz
         }
 
+        [HttpPost]
+        public IActionResult UpdateEvent([FromBody] TakvimGuncelle model)
+        {
+            if (model != null)
+            {
+                var isler = _context.Islers.FirstOrDefault(i => i.IsId == model.Id);
 
+                if (isler != null)
+                {
+                    isler.IsBaslangic = model.Start;
+                    isler.IsBitirmeSure = model.End;
+                    _context.SaveChanges();
 
-
-
+                    return Json(new { success = true, message = "Görev başarıyla güncellendi." });
+                }
+            }
+            return Json(new { success = false, message = "Görev güncellenirken bir hata oluştu." });
+        }
 
     }
-
 }
