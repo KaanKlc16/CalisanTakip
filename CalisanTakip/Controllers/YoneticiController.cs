@@ -181,37 +181,39 @@ namespace CalisanTakip.Controllers
         {
             var birimId = HttpContext.Session.GetInt32("PersonelBirimId");
 
-            // Isler tablosu ile IsPersonel ve IsDurum tablolarını ilişkilendiriyoruz
+            
             var isDurumlar = _context.Islers
-                .Include(i => i.IsPersonel)  // Personeller tablosunu dahil ediyoruz
-                .Include(i => i.IsDurum)     // Durumlar tablosunu dahil ediyoruz
+                .Include(i => i.IsPersonel)  
+                .Include(i => i.IsDurum)     
                 .Where(i => i.IsPersonel.PersonlBirimId == birimId)
                 .Select(i => new
                 {
-                    i.IsId,                // IsId'yi burada alıyoruz
+                    i.IsId,                
                     i.IsBaslik,
                     i.IsAciklama,
                     i.IsBaslangic,
                     i.IsBitirmeSure,
-                    personelAdSoyad = i.IsPersonel.PersonelAdSoyad, // Personeller tablosundan veri alıyoruz
-                                       
+                    personelAdSoyad = i.IsPersonel.PersonelAdSoyad,
+                     i.TahminiSure
+
                 })
                 .ToList();
 
-            // Takvim olayları için gerekli verileri hazırlıyoruz
+            
             var events = isDurumlar.Select(d => new
             {
-                id = d.IsId,  // Burada IsId'yi kullanıyoruz
+                id = d.IsId,
                 calendarId = "1",
                 title = d.IsBaslik + " - " + d.personelAdSoyad,
                 category = "time",
                 start = d.IsBaslangic?.ToString("yyyy-MM-ddTHH:mm:ss"),
                 end = d.IsBitirmeSure?.ToString("yyyy-MM-ddTHH:mm:ss"),
                 description = d.IsAciklama,
-                PersonelAdSoyad = d.personelAdSoyad
+                PersonelAdSoyad = d.personelAdSoyad,
+                tahminiSure = $"{d.TahminiSure} saat"
             });
 
-            return Json(events);  // JSON olarak döndürüyoruz
+            return Json(events);  
         }
 
         [HttpPost]

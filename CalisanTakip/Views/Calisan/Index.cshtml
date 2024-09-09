@@ -77,43 +77,75 @@
             margin-top: 30px;
             color: #000000; 
         }
+
+       
+        .tahmini-sure-container {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #ffcccc; /* Kırmızı kutu */
+            border: 2px solid #ff0000; /* Kırmızı çerçeve */
+            color: #ff0000; /* Kırmızı yazı rengi */
+            font-weight: bold;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .tahmini-sure-container input {
+            border: 1px solid #ff0000;
+        }
+
+        .card-footer button {
+            margin-top: 10px;
+        }
+        
+    
     </style>
 </head>
 <body>
 
-    <div class="container-white">
-        <h1>Kullanıcı Bilgileri</h1>
-        <p>Ad Soyad: @personelAdSoyad</p>
-        <p>Personel ID: @personelId</p>
-        <p>Birim ID: @personelBirimId</p>
-        <p>Yetki Tür ID: @personelYetkiTurID</p>
-        <p>Birim Ad: @birimAd</p>
-
-        <div class="row">
-            @foreach (var i in ViewBag.Isler)
+    <div class="row">
+        @foreach (var i in ViewBag.Isler)
+        {
+            using (Html.BeginForm("UpdateTahminiSure", "Calisan", FormMethod.Post, new { @class = "col-lg-6 col-md-6 col-sm-12 col-xs-12" }))
             {
-                using (Html.BeginForm("Index", "Calisan", FormMethod.Post, new { @class = "col-lg-6 col-md-6 col-sm-12 col-xs-12" }))
-                {
-                    <div class="card">
-                        <div class="card-header text-center">
-                            Yeni Görev !!!
+                <div class="card">
+                    <div class="card-header text-center">
+                        Yeni Görev !!!
+                    </div>
+                    <div class="card-body">
+                        <input type="hidden" name="isId" value="@i.IsId" />
+                        <div class="mb-3">
+                            <strong>@i.IsBaslik</strong>
                         </div>
-                        <div class="card-body">
-                            <input type="hidden" name="isId" value="@i.IsId" />
-                            <div class="mb-3">
-                                <strong>@i.IsBaslik</strong>
-                            </div>
+
+                       
+                        <div class="task-details">
+                            <p>@i.IsAciklama</p>
                         </div>
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-outline-info">
-                                Okundu Olarak İşaretle
-                            </button>
+
+                       
+                        <div class="estimated-time-container">
+                            <label for="tahminiSureSlider">Tahmini Süre (Saat):</label>
+                            <input type="range" name="tahminiSure" id="tahminiSureSlider_@i.IsId" min="1" max="24" step="1" value="1" class="form-range" oninput="updateTahminiSureValue(@i.IsId)" />
+                            <span id="tahminiSureValue_@i.IsId">1 Saat</span>
                         </div>
                     </div>
-                }
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-outline-info">Tahmini Süreyi Kaydet</button>
+                    </div>
+                </div>
             }
-        </div>
+        }
     </div>
+
+    <script>
+        function updateTahminiSureValue(isId) {
+            var slider = document.getElementById('tahminiSureSlider_' + isId);
+            var output = document.getElementById('tahminiSureValue_' + isId);
+            output.innerHTML = slider.value + ' Saat';
+        }
+    </script>
+
 
     <div class="container-white">
         <h1>Takvim</h1>
@@ -128,24 +160,55 @@
             var calendarEl = document.getElementById('calendar');
 
             var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                events: '/Yonetici/GetCalendarEvents',
-                locale: 'tr',
+                initialView: 'timeGridWeek', 
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    right: 'timeGridWeek,timeGridDay' 
                 },
+                events: '/Calisan/GetCalendarEvents',
+                locale: 'tr',
+                
                 eventTimeFormat: {
                     hour: '2-digit',
                     minute: '2-digit',
                     meridiem: false
+                },
+                eventContent: function (arg) {
+                    let customHtml = `<div>${arg.event.title}</div>`;
+                    if (arg.event.extendedProps.tahminiSure) {
+                        customHtml += `<div style="background-color: #ffcccc; color: #ff0000; padding: 5px; border-radius: 5px;">Tahmini Süre: ${arg.event.extendedProps.tahminiSure}</div>`;
+                    }
+                    return { html: customHtml };
                 }
             });
 
             calendar.render();
         });
+
+
     </script>
+    <style>
+    .tahmini-sure-container {
+        margin-top: 10px;
+        padding: 10px;
+        background-color: #ffcccc; /* Kırmızı kutu */
+        border: 2px solid #ff0000; /* Kırmızı çerçeve */
+        color: #ff0000; //
+        font-weight: bold;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .tahmini-sure-container input {
+        border: 1px solid #ff0000;
+    }
+
+    .card-footer button {
+        margin-top: 10px;
+    }
+</style>
+
 
 </body>
 </html>

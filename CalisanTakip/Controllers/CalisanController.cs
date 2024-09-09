@@ -50,6 +50,7 @@ namespace CalisanTakip.Controllers
             {
                 return RedirectToAction("Index", "Calisan");
             }
+
         }
         [HttpPost]
         public IActionResult Index(int isId)
@@ -64,45 +65,6 @@ namespace CalisanTakip.Controllers
             }
 
             return RedirectToAction("Yap", "Calisan");
-        }
-        public IActionResult GetCalendarEvents()
-        {
-            var birimId = HttpContext.Session.GetInt32("PersonelBirimId");
-            // İşlerinizi alıp IsDurum modeline dönüştürün
-            var isDurumlar = _context.Islers
-                 .Include(i => i.IsPersonel)  // Personeller tablosunu dahil ediyoruz
-                 .Include(i => i.IsDurum)     // Durumlar tablosunu dahil ediyoruz
-                 .Where(i => i.IsPersonel.PersonlBirimId == birimId)
-                 .Select(i => new
-                 {
-                     i.IsId,                // IsId'yi burada alıyoruz
-                     i.IsBaslik,
-                     i.IsAciklama,
-                     i.IsBaslangic,
-                     i.IsBitirmeSure,
-                     personelAdSoyad = i.IsPersonel.PersonelAdSoyad,
-                     i.TahminiSure
-
-                 })
-                 .ToList();
-
-
-            // Takvim olayları için gerekli verileri hazırlıyoruz
-            var events = isDurumlar.Select(d => new
-            {
-                id = d.IsId,  // Burada IsId'yi kullanıyoruz
-                calendarId = "1",
-                title = d.IsBaslik + " - " + d.personelAdSoyad,
-                category = "time",
-                start = d.IsBaslangic?.ToString("yyyy-MM-ddTHH:mm:ss"),
-                end = d.IsBitirmeSure?.ToString("yyyy-MM-ddTHH:mm:ss"),
-
-                description = d.IsAciklama + " - Tahmini Süre: " + d.TahminiSure,
-                PersonelAdSoyad = d.personelAdSoyad
-            });
-
-
-            return Json(events);  // JSON formatında döndürüyoruz
         }
 
         public IActionResult Yap()
@@ -200,6 +162,9 @@ namespace CalisanTakip.Controllers
                         isYorum = i.IsYorum
 
 
+                        // durumAd=i.Durumlars.DurumAd, durum aayrla
+                        // durumAd = i.isler.DurumAd
+
                     };
                     model.isDurumlar.Add(isDurum);
                 }
@@ -212,5 +177,57 @@ namespace CalisanTakip.Controllers
                 return RedirectToAction("Index", "Login");
             }
         }
+        public IActionResult GetCalendarEvents()
+        {
+            var birimId = HttpContext.Session.GetInt32("PersonelBirimId");
+
+            
+            var isDurumlar = _context.Islers
+                .Include(i => i.IsPersonel)  
+                .Include(i => i.IsDurum)     
+                .Where(i => i.IsPersonel.PersonlBirimId == birimId)
+                .Select(i => new
+                {
+                    i.IsId,                
+                    i.IsBaslik,
+                    i.IsAciklama,
+                    i.IsBaslangic,
+                    i.IsBitirmeSure,
+                    personelAdSoyad = i.IsPersonel.PersonelAdSoyad,
+                    i.TahminiSure           
+                })
+                .ToList();
+
+            // Takvim olayları için gerekli verileri hazırlıyoruz
+            var events = isDurumlar.Select(d => new
+            {
+                id = d.IsId,  
+                calendarId = "1",
+                title = d.IsBaslik + " - " + d.personelAdSoyad,
+                category = "time",
+                start = d.IsBaslangic?.ToString("yyyy-MM-ddTHH:mm:ss"),
+                end = d.IsBitirmeSure?.ToString("yyyy-MM-ddTHH:mm:ss"),
+                description = d.IsAciklama,
+                personelAdSoyad = d.personelAdSoyad,
+                tahminiSure = d.TahminiSure != null ? $"{d.TahminiSure} saat" : "Tahmini süre girilmedi" 
+            });
+
+            return Json(events);  
+        }
+
+
+
+        [HttpPost]
+        public IActionResult UpdateTahminiSure(int isId, int tahminiSure)
+        {
+            var isler = _context.Islers.FirstOrDefault(i => i.IsId == isId);
+            if (isler != null)
+            {
+                isler.TahminiSure = tahminiSure;  
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Index");  
+        }
+
     }
 }

@@ -39,13 +39,14 @@
     document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
+            initialView: 'timeGridWeek', // Başlangıçta hafta görünümü
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                right: 'timeGridWeek,timeGridDay' // Yalnızca Week ve Day görünümleri
             },
-            events: '/Yonetici/GetCalendarEvents', 
+            events: '/Yonetici/GetCalendarEvents',
+            locale: 'tr',
             editable: true,
             eventResizableFromStart: true, 
             eventDrop: function (info) {
