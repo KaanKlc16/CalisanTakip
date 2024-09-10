@@ -4,103 +4,72 @@
 
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Görev Takip Yönetici</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-
-        .navbar {
-            background-color: #2e8b57; /* Koyu yeşil arka plan rengi */
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.8rem 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            color: #ffffff; /* Beyaz metin rengi */
-        }
-
-            .navbar img {
-                background-color: #ffffff; /* Görselin arka planını koyu gri yap */
-                padding: 5px;
-                border-radius: 8px; /* Köşe yuvarlama */
-            }
-
-            .navbar a {
-                color: #ffffff; /* Beyaz metin rengi */
-                text-decoration: none;
-                padding: 14px 20px;
-                font-size: 17px;
-                font-weight: 500;
-                border-radius: 4px;
-                transition: background-color 0.3s, color 0.3s;
-            }
-
-                .navbar a:hover {
-                    background-color: #495057; /* Hover arka plan rengi */
-                    color: #ffffff; /* Hover'da beyaz renk */
-                }
-
-                .navbar a.active {
-                    background-color: #ffffff; /* Beyaz arka plan rengi */
-                    color: #2e8b57; /* Koyu yeşil metin rengi */
-                }
-
-            .navbar .search-container {
-                display: flex;
-                align-items: center;
-            }
-
-            .navbar input[type="text"] {
-                padding: 6px;
-                font-size: 17px;
-                border: none;
-                border-radius: 4px;
-                margin-right: 10px;
-            }
-
-            .navbar button {
-                padding: 6px 12px;
-                background-color: #28a745; /* Buton arka plan rengi */
-                color: white;
-                font-size: 17px;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-
-                .navbar button:hover {
-                    background-color: #218838; /* Buton hover rengi */
-                }
-
-        .container {
-            margin: 50px auto;
-            max-width: 1200px;
-            padding: 20px;
-            background-color: #ffffff; /* Beyaz arka plan rengi */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hafif gölge efekti */
-            border-radius: 8px;
-        }
-    </style>
+    <!-- SB Admin 2 CSS -->
+    <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
 </head>
-<body>
-    <nav class="navbar">
-        <img src="~/images/uludagenerji (1).png" alt="" style="height: 40px;">
-        @Html.ActionLink("Anasayfa", "Index", "Yonetici", null, new { @class = "" })
-        @Html.ActionLink("Görev Ata", "Ata", "Yonetici", null, new { @class = "" })
-        @Html.ActionLink("Görev Takip", "Takip", "Yonetici", null, new { @class = "" })
-        @Html.ActionLink("Çıkış", "Index", "Login", null, new { @class = "" })
-    </nav>
 
-    <main role="main" class="container">
-        @RenderBody()
-    </main>
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar (if needed) -->
+        <!-- Add Sidebar here if your page has it -->
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <ul class="navbar-nav ml-auto">
+                        <!-- Navigation Links -->
+                        <li class="nav-item">
+                            @Html.ActionLink("Anasayfa", "Index", "Yonetici", null, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Görev Ata", "Ata", "Yonetici", null, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Görev Takip", "Takip", "Yonetici", null, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Çıkış", "Index", "Login", null, new { @class = "nav-link" })
+                        </li>
+                    </ul>
+                </nav>
+                <!-- End of Topbar -->
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+    <!-- SB Admin 2 Scripts -->
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="~/js/sb-admin-2.min.js"></script>
 </body>
+
 </html>

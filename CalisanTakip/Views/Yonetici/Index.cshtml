@@ -1,93 +1,208 @@
 ﻿@{
     ViewData["Title"] = "Takvim";
-    Layout = "~/Views/Shared/_LayoutYonetici.cshtml";
+    Layout = null; // Bu sayfa bağımsız bir layout kullanıyor
 }
 
-<h1 class="text-center my-4 text-white">Takvim</h1>
+<!DOCTYPE html>
+<html lang="tr">
 
-<div id="calendar"></div>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Görev Takip Yönetici</title>
 
-<!-- FullCalendar CSS -->
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
 
-<!-- Bootstrap CSS (for modal and other styles) -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- SB Admin 2 CSS -->
+    <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
 
-<!-- Modal for event details -->
-<div id="eventModal" class="modal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalTitle">Etkinlik Detayları</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p id="modalDescription"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-            </div>
-        </div>
-    </div>
-</div>
+    <!-- Modal için Stil -->
+    <style>
+        #eventModal .modal-dialog {
+            max-width: 800px;
+        }
 
-<!-- FullCalendar JS -->
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+        #eventModal .modal-content {
+            border-radius: 0.35rem;
+        }
 
-<!-- Calendar Initialization -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'timeGridWeek', // Başlangıçta hafta görünümü
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'timeGridWeek,timeGridDay' // Yalnızca Week ve Day görünümleri
-            },
-            events: '/Yonetici/GetCalendarEvents',
-            locale: 'tr',
-            editable: true,
-            eventResizableFromStart: true, 
-            eventDrop: function (info) {
-                
-                updateEvent(info.event);
-            },
-            eventResize: function (info) {
-                // Event is resized
-                updateEvent(info.event);
-            },
-            eventClick: function (info) {
-                // Display event details in the modal
-                document.getElementById('modalTitle').innerText = info.event.title;
-                document.getElementById('modalDescription').innerText = info.event.extendedProps.description;
+        body {
+            background-color: #f8f9fc;
+        }
 
-                // Personel adını modal'a ekliyoruz
-                if (info.event.extendedProps.personelAdSoyad) {
-                    document.getElementById('modalDescription').innerText += '\nAtanan Personel: ' + info.event.extendedProps.personelAdSoyad;
+        #calendar {
+            max-width: 1000px;
+            height: 700px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar {
+            background-color: #5a5c69;
+        }
+
+        h1 {
+            color: #ffffff;
+        }
+
+        /* Sidebar item styling */
+        .sidebar .nav-item {
+            margin-bottom: 10px;
+        }
+
+            .sidebar .nav-item a {
+                font-size: 16px;
+                padding-left: 20px;
+            }
+
+                .sidebar .nav-item a i {
+                    margin-right: 8px; /* Ikon ile yazı arasındaki boşluk */
                 }
 
-                var modal = new bootstrap.Modal(document.getElementById('eventModal'));
-                modal.show();
-            },
+        /* Çizgi ayırıcısı */
+        .sidebar-divider {
+            border-top: 1px solid #dee2e6;
+            margin: 0.5rem 0;
+        }
+    </style>
+</head>
 
-            eventColor: '#03a9f4', 
-            displayEventTime: true 
-        });
+<body id="page-top">
 
-        calendar.render();
+    <!-- Page Wrapper -->
+    <div id="wrapper">
 
-        
-        function updateEvent(event) {
-            // Prepare data to be sent
-            var eventData = {
-                id: event.id,
-                start: event.start.toISOString(),
-                end: event.end ? event.end.toISOString() : event.start.toISOString() // If no end date, use start date
-            };
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+            <!-- Sidebar - Logo -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="~/Yonetici/Index">
+                <div class="sidebar-brand-text mx-3">Görev Takip Yönetici Paneli</div>
+            </a>
 
-            // Send an AJAX request to update the event in the database
-            fetch('/Yonetici/UpdateEvent', {
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                @Html.ActionLink("Anasayfa", "Index", "Yonetici", null, new { @class = "nav-link"  })
+            </li>
+
+            <li class="nav-item">
+                @Html.ActionLink("Görev Ata", "Ata", "Yonetici", null, new { @class = "nav-link" })
+            </li>
+
+            <li class="nav-item">
+                @Html.ActionLink("Görev Takip", "Takip", "Yonetici", null, new { @class = "nav-link" })
+            </li>
+
+            <li class="nav-item">
+                @Html.ActionLink("Çıkış", "Index", "Login", null, new { @class = "nav-link" })
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+        </ul>
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Page Content -->
+                <div class="container-fluid">
+
+                   
+
+                    <!-- SB Admin 2 Kart Yapısı -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Efor Takip</h6>
+                        </div>
+                        <div class="card-body">
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Yönetici Paneli 2024</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+
+    <!-- SB Admin 2 JS -->
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="~/js/sb-admin-2.min.js"></script>
+
+    <!-- Takvim Başlatma ve Etkinlik Güncelleme -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridWeek',
+                themeSystem: 'bootstrap',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'timeGridWeek,timeGridDay'
+                },
+                events: '/Yonetici/GetCalendarEvents',
+                locale: 'tr',
+                editable: true,
+                eventResizableFromStart: true,
+                eventDrop: function (info) {
+                    updateEvent(info.event);
+                },
+                eventResize: function (info) {
+                    updateEvent(info.event);
+                },
+                eventClick: function (info) {
+                    document.getElementById('modalTitle').innerText = info.event.title;
+                    document.getElementById('modalDescription').innerText = info.event.extendedProps.description;
+
+                    if (info.event.extendedProps.personelAdSoyad) {
+                        document.getElementById('modalDescription').innerText += '\nAtanan Personel: ' + info.event.extendedProps.personelAdSoyad;
+                    }
+
+                    var modal = new bootstrap.Modal(document.getElementById('eventModal'));
+                    modal.show();
+                },
+                eventColor: '#6c757d', // Etkinlik kutucuklarının rengi
+                displayEventTime: true,
+                eventContent: function (info) {
+                    return {
+                        html: '<div style="background-color: #6c757d; color: #ffffff; padding: 5px; border-radius: 4px;">' + info.event.title + '</div>'
+                    }
+                }
+            });
+
+            calendar.render();
+
+            function updateEvent(event) {
+                var eventData = {
+                    id: event.id,
+                    start: event.start.toISOString(),
+                    end: event.end ? event.end.toISOString() : event.start.toISOString()
+                };
+
+                fetch('/Yonetici/UpdateEvent', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -102,29 +217,32 @@
                 }
             }).catch(error => {
                 alert("There was an error: " + error);
-                calendar.refetchEvents(); // Revert the event changes if there's a network error
-            });
-        }
-    });
-</script>
+                calendar.refetchEvents(); // Revert
+                });
+            }
+        });
+    </script>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Modal için HTML -->
+    <div id="eventModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Etkinlik Detayları</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="modalDescription"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<!-- Additional Styles -->
-<style>
-    body {
-        background-color: #2c3e50;
-    }
+</body>
 
-    #calendar {
-        background-color: #ffffff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    h1 {
-        color: #ffffff;
-    }
-</style>
+</html>

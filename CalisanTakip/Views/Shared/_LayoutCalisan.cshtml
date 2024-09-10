@@ -8,22 +8,31 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Görev Takip Çalışan</title>
+    <!-- SB Admin 2 CSS -->
+    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <!-- Custom styles -->
     <style>
+        <style >
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Nunito', sans-serif;
             margin: 0;
             padding: 0;
+            height: 100vh; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .navbar {
             background-color: #145214;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.5rem 1rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            height: 50px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
         }
 
             .navbar img {
@@ -31,53 +40,99 @@
                 border-radius: 8px;
             }
 
-            .navbar div {
-                display: flex;
-                align-items: center;
-                justify-content: flex-end; /* Butonları sağa hizalar */
-            }
-
             .navbar a {
                 color: white;
-                text-align: center;
-                padding: 10px 15px;
-                text-decoration: none;
-                font-size: 15px;
             }
-
-                .navbar a:hover {
-                    background-color: #495057;
-                }
 
                 .navbar a.active {
                     background-color: #ffffff;
                     color: #2e8b57;
                 }
 
-        .container {
-            margin: 40px auto;
-            max-width: 1000px;
-            padding: 20px;
-            background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+        #wrapper {
+            padding-top: 56px; /* Navbar yüksekliği kadar boşluk bırak */
+            flex: 1;
+            width: 100%; /* İçeriği tam genişlikte yap */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center; /* Yatay ortalama */
+            min-height: 100vh;
+        }
+
+        #content {
+            width: 100%;
+            max-width: 1200px; /* Sayfanın genişliği */
+            margin: 0 auto;
+        }
+
+        .card {
+            width: 100%;
         }
     </style>
-</head>
-<body>
-    <nav class="navbar">
-        <img src="~/images/uludagenerji (1).png" alt="Logo">
-        <div>
-            @Html.ActionLink("Görev Takip", "Index", "Calisan", null, new { @class = "active" })
-            @Html.ActionLink("Anasayfa", "Index", "Calisan", null, new { @class = "" })
-            @Html.ActionLink("Görev Tamamla", "Yap", "Calisan", null, new { @class = "" })
-            @Html.ActionLink("Görev Takip", "Takip", "Calisan", null, new { @class = "" })
-            @Html.ActionLink("Çıkış", "Index", "Login", null, new { @class = "" })
-        </div>
-    </nav>
 
-    <main role="main" class="container">
-        @RenderBody()
-    </main>
+
+    
+</head>
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand navbar-light topbar mb-4 static-top shadow">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img src="~/images/uludagenerji (1).png" alt="Logo">
+                </a>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        @Html.ActionLink("Görev Takip", "Index", "Calisan", null, new { @class = "nav-link active" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Anasayfa", "Index", "Calisan", null, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Görev Tamamla", "Yap", "Calisan", null, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Görev Takip", "Takip", "Calisan", null, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Çıkış", "Index", "Login", null, new { @class = "nav-link" })
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div id="content">
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Görev Takip</h1>
+                </div>
+
+                <!-- Content Row -->
+                <div class="row">
+                    <!-- Example Card -->
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Görevler</h6>
+                            </div>
+                            <div class="card-body">
+                                @RenderBody()
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SB Admin 2 Scripts -->
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="~/js/sb-admin-2.min.js"></script>
 </body>
 </html>

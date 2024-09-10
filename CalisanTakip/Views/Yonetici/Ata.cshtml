@@ -1,110 +1,100 @@
 ﻿@model CalisanTakip.Repository.Models.Isler
 
 @{
-    ViewData["Title"] = "Ata";
+    ViewData["Title"] = "Görev Ata";
     Layout = "~/Views/Shared/_LayoutYonetici.cshtml";
 }
 
-<style>
-    body {
-        background-color: #2c3e50;
-    }
+  
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
 
-    .bg-gradient-primary {
-        background: linear-gradient(135deg, #2b2e4a, #3e50b4);
-        color: white;
-    }
+        <!-- Main Content -->
+        <div id="content" class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
 
-    .text-gradient {
-        font-weight: bold;
-        color: black;
-    }
+            <!-- Page Heading -->
+            <h1 class="h3 mb-4 text-gray-800">Görev Ata</h1>
 
-    .form-label {
-        font-weight: bold;
-        color: black;
-    }
+            <!-- Form Container -->
+            <div class="col-lg-6">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Görev Detayları</h6>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="Ata">
+                            <!-- Görev Başlığı -->
+                            <div class="form-group">
+                                <label asp-for="IsBaslik" class="form-label">Görev Başlığı</label>
+                                <input asp-for="IsBaslik" class="form-control form-control-sm" />
+                                <span asp-validation-for="IsBaslik" class="text-danger"></span>
+                            </div>
 
-    .custom-btn {
-        background: linear-gradient(135deg, #28a745, #218838);
-        color: white;
-        padding: 15px 30px;
-        font-size: 18px;
-        font-weight: bold;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        text-align: center;
-        transition: background 0.3s ease;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
+                            <!-- Görev Açıklaması -->
+                            <div class="form-group">
+                                <label asp-for="IsAciklama" class="form-label">Görev Açıklaması</label>
+                                <textarea asp-for="IsAciklama" class="form-control form-control-sm"></textarea>
+                                <span asp-validation-for="IsAciklama" class="text-danger"></span>
+                            </div>
 
-        .custom-btn:hover {
-            background: linear-gradient(135deg, #218838, #28a745);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-        }
+                            <!-- Çalışan Seçin -->
+                            <div class="form-group">
+                                <label asp-for="IsPersonelId" class="form-label">Çalışan Seçin</label>
+                                <select asp-for="IsPersonelId" class="form-control form-control-sm">
+                                    <option selected disabled>Personel Seçin</option>
+                                    @foreach (var personel in (List<CalisanTakip.Repository.Models.Personeller>)ViewBag.personeller)
+                                    {
+                                        <option value="@personel.PersonelId">@personel.PersonelAdSoyad</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="IsPersonelId" class="text-danger"></span>
+                            </div>
 
-    .shadow-sm {
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
+                            <!-- Başlangıç Tarihi -->
+                            <div class="form-group">
+                                <label asp-for="IsBaslangic" class="form-label">Başlangıç Tarihi</label>
+                                <input asp-for="IsBaslangic" class="form-control form-control-sm" type="datetime-local" />
+                                <span asp-validation-for="IsBaslangic" class="text-danger"></span>
+                            </div>
 
-    .shadow-lg {
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    }
+                            <!-- Bitirme Süresi -->
+                            <div class="form-group">
+                                <label asp-for="IsBitirmeSure" class="form-label">Bitirme Süresi</label>
+                                <input asp-for="IsBitirmeSure" class="form-control form-control-sm" type="datetime-local" />
+                                <span asp-validation-for="IsBitirmeSure" class="text-danger"></span>
+                            </div>
 
-    .rounded-3 {
-        border-radius: 1rem;
-    }
-
-    .card-body {
-        background-color: white;
-    }
-
-    .center-btn {
-        display: flex;
-        justify-content: center;
-    }
-</style>
-
-<h2 class="mb-4">Görev Ata</h2>
-
-<div class="card shadow-lg rounded-3">
-    <div class="card-body">
-        <form asp-action="Ata">
-            <div class="mb-3">
-                <label asp-for="IsBaslik" class="form-label">Görev Başlığı</label>
-                <input asp-for="IsBaslik" class="form-control" />
+                            <!-- Submit Button -->
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success btn-icon-split">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span class="text">Görev Ata</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-
-            <div class="mb-3">
-                <label asp-for="IsAciklama" class="form-label">Görev Açıklaması</label>
-                <textarea asp-for="IsAciklama" class="form-control"></textarea>
+        </div>
+        <!-- End of Main Content -->
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; Efor Kaan Takibi Paneli 2024</span>
+                </div>
             </div>
+        </footer>
+        <!-- End of Footer -->
 
-            <div class="mb-3">
-                <label asp-for="IsPersonelId" class="form-label">Çalışan Seçin</label>
-                <select asp-for="IsPersonelId" class="form-control">
-                    <option selected>Personel Seçin</option>
-                    @foreach (var personel in (List<CalisanTakip.Repository.Models.Personeller>)ViewBag.personeller)
-                    {
-                        <option value="@personel.PersonelId">@personel.PersonelAdSoyad</option>
-                    }
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="IsBaslangic" class="form-label">Başlangıç Tarihi</label>
-                <input asp-for="IsBaslangic" class="form-control" type="datetime-local" />
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="IsBitirmeSure" class="form-label">Bitirme Süresi</label>
-                <input asp-for="IsBitirmeSure" class="form-control" type="datetime-local" />
-            </div>
-
-            <div class="center-btn">
-                <button type="submit" class="custom-btn shadow-sm">Görev Ata</button>
-            </div>
-        </form>
     </div>
+    <!-- End of Content Wrapper -->
 </div>
+<!-- End of Page Wrapper -->
+<!-- SB Admin 2 Validation -->
+<script src="~/vendor/jquery/jquery.min.js"></script>
+<script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="~/js/sb-admin-2.min.js"></script>

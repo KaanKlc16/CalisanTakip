@@ -179,60 +179,75 @@ namespace CalisanTakip.Controllers
 
         public IActionResult GetCalendarEvents()
         {
-            var birimId = HttpContext.Session.GetInt32("PersonelBirimId");
+            var personelBirimId = HttpContext.Session.GetInt32("PersonelBirimId");
 
-            
+            if (personelBirimId == null)
+            {
+                return Json(new { success = false, message = "Personel Birim ID bulunamadı." });
+            }
+
             var isDurumlar = _context.Islers
-                .Include(i => i.IsPersonel)  
-                .Include(i => i.IsDurum)     
-                .Where(i => i.IsPersonel.PersonlBirimId == birimId)
+                .Include(i => i.IsPersonel)
+                .Include(i => i.IsDurum)
+                .Where(i => i.IsPersonel.PersonlBirimId == personelBirimId)
                 .Select(i => new
                 {
-                    i.IsId,                
+                    i.IsId,
                     i.IsBaslik,
                     i.IsAciklama,
                     i.IsBaslangic,
                     i.IsBitirmeSure,
                     personelAdSoyad = i.IsPersonel.PersonelAdSoyad,
-                     i.TahminiSure
-
+                    i.TahminiSure
                 })
                 .ToList();
 
-            
             var events = isDurumlar.Select(d => new
             {
                 id = d.IsId,
                 calendarId = "1",
-                title = d.IsBaslik + " - " + d.personelAdSoyad,
+                title = $"{d.IsBaslik} - {d.personelAdSoyad}",
                 category = "time",
-                start = d.IsBaslangic?.ToString("yyyy-MM-ddTHH:mm:ss"),
-                end = d.IsBitirmeSure?.ToString("yyyy-MM-ddTHH:mm:ss"),
+                start = d.IsBaslangic.HasValue ? d.IsBaslangic.Value.ToString("yyyy-MM-ddTHH:mm:ss") : null,
+                end = d.IsBitirmeSure.HasValue ? d.IsBitirmeSure.Value.ToString("yyyy-MM-ddTHH:mm:ss") : null,
                 description = d.IsAciklama,
                 PersonelAdSoyad = d.personelAdSoyad,
                 tahminiSure = $"{d.TahminiSure} saat"
             });
 
-            return Json(events);  
+            return Json(events);
         }
 
         [HttpPost]
         public IActionResult UpdateEvent([FromBody] TakvimGuncelle model)
         {
-            if (model != null)
+            if (model == null)
             {
-                var isler = _context.Islers.FirstOrDefault(i => i.IsId == model.Id);
-
-                if (isler != null)
-                {
-                    isler.IsBaslangic = model.Start;
-                    isler.IsBitirmeSure = model.End;
-                    _context.SaveChanges();
-
-                    return Json(new { success = true, message = "Görev başarıyla güncellendi." });
-                }
+                return Json(new { success = false, message = "Model verisi alınamadı." });
             }
-            return Json(new { success = false, message = "Görev güncellenirken bir hata oluştu." });
+
+            var isler = _context.Islers.FirstOrDefault(i => i.IsId == model.Id);
+
+            if (isler == null)
+            {
+                return Json(new { success = false, message = "Görev bulunamadı." });
+            }
+
+            
+            if (model.Start != DateTime.MinValue)
+            {
+                isler.IsBaslangic = model.Start;
+            }
+
+
+            if (model.End != DateTime.MinValue)
+            {
+                isler.IsBitirmeSure = model.End;
+            }
+
+            _context.SaveChanges();
+
+            return Json(new { success = true, message = "Görev başarıyla güncellendi." });
         }
 
     }
